@@ -1160,6 +1160,10 @@
               targetScroll = heroSection.offsetTop + 64;
             }
 
+            // While veil is opaque: reset animation overlays so they are clean
+            // if the user scrolls back into the animation zone later.
+            if (introFade) introFade.style.opacity = '0';
+
             // Invisible snap — veil covers everything
             lenis.scrollTo(targetScroll, { immediate: true });
 
@@ -1193,21 +1197,25 @@
           end: 'bottom bottom',
           scrub: 1.5,
           onUpdate: (self) => {
-            const p = self.progress;
+            const p   = self.progress;
+            const dir = self.direction; // 1 = scrolling forward, -1 = scrolling back
 
             render(Math.round(p * (TOTAL - 1)));
 
             if (scrollHint) scrollHint.style.opacity = p > 0.02 ? '0' : '1';
 
-            // Parchment dissolve over the final 15% — drive both overlays in sync
+            // Parchment dissolve over the final 15% — drive both overlays in sync.
+            // When scrolling backward, the scrub-lagged p can still be near 1.0 even
+            // though the user has reversed — hide overlays immediately on reversal so
+            // the lagged p value never re-shows the parchment flash.
             if (p < 0.9) introComplete = false;
             if (!introComplete) {
-              const fadeAmt = Math.max((p - 0.85) / 0.15, 0);
+              const fadeAmt = dir < 0 ? 0 : Math.max((p - 0.85) / 0.15, 0);
               if (introFade) introFade.style.opacity = fadeAmt;
               if (veil)      veil.style.opacity      = fadeAmt;
 
-              // Nav state
-              const showNav = p >= 0.85;
+              // Nav state — hide immediately when reversing
+              const showNav = dir > 0 && p >= 0.85;
               nav.style.opacity       = showNav ? '1' : '0';
               nav.style.pointerEvents = showNav ? '' : 'none';
               nav.style.transform     = showNav ? 'translateY(0)' : 'translateY(-100%)';
@@ -1220,9 +1228,18 @@
             }
           },
           onEnterBack: () => {
-            // User scrolled back into animation zone — restore canvas visibility
+            // User scrolled back into animation zone — restore canvas immediately.
+            // Remove the CSS transition handoffToHero() set so onUpdate can drive
+            // veil opacity directly without extra lag on reverse scrub.
             introComplete = false;
-            if (veil) { veil.style.opacity = '0'; veil.style.pointerEvents = 'none'; }
+            if (veil) {
+              veil.style.transition    = 'none';
+              veil.style.opacity       = '0';
+              veil.style.pointerEvents = 'none';
+            }
+            // Reset the parchment overlay — if left at opacity 1 it blanks the canvas
+            // until the 1.5s scrub lag catches up, causing the white-space flash.
+            if (introFade) introFade.style.opacity = '0';
           }
         });
       }
