@@ -1172,28 +1172,29 @@
             if (scrollHint) scrollHint.style.opacity = p > 0.02 ? '0' : '1';
 
             // Parchment dissolve over the final 15% — drive both overlays in sync
+            if (p < 0.9) introComplete = false;
             if (!introComplete) {
               const fadeAmt = Math.max((p - 0.85) / 0.15, 0);
               if (introFade) introFade.style.opacity = fadeAmt;
               if (veil)      veil.style.opacity      = fadeAmt;
 
               // Nav state
-              if (p >= 1) {
-                nav.style.opacity       = '1';
-                nav.style.pointerEvents = '';
-                nav.style.transform     = 'translateY(0)';
-              } else {
-                nav.style.opacity       = '0';
-                nav.style.pointerEvents = 'none';
-                nav.style.transform     = 'translateY(-100%)';
-              }
-
-              // One-shot: when animation is fully scrubbed, hand off to the hero
-              if (p >= 1) {
-                introComplete = true;
-                handoffToHero();
-              }
+              const showNav = p >= 0.85;
+              nav.style.opacity       = showNav ? '1' : '0';
+              nav.style.pointerEvents = showNav ? '' : 'none';
+              nav.style.transform     = showNav ? 'translateY(0)' : 'translateY(-100%)';
             }
+          },
+          onLeave: () => {
+            if (!introComplete) {
+              introComplete = true;
+              handoffToHero();
+            }
+          },
+          onEnterBack: () => {
+            // User scrolled back into animation zone — restore canvas visibility
+            introComplete = false;
+            if (veil) { veil.style.opacity = '0'; veil.style.pointerEvents = 'none'; }
           }
         });
       }
@@ -1216,12 +1217,22 @@
             initScrollTrigger();
           }
         };
+        img.onerror = function () {
+          loaded++;
+          if (loadBar) loadBar.style.width = ((loaded / TOTAL) * 100) + '%';
+          if (loaded === TOTAL) {
+            if (loadOverlay) {
+              loadOverlay.style.opacity = '0';
+              setTimeout(() => { loadOverlay.style.display = 'none'; }, 700);
+            }
+            initScrollTrigger();
+          }
+        };
         img.src = 'brand_identity/video/frames/frame_' + num + '.webp';
         frames[i] = img;
       }
 
       window.addEventListener('resize', resizeCanvas);
-      resizeCanvas();
     })();
 
     /* ── Story expand ────────────────────── */
