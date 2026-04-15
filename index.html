@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kingdom Para Para — Unlock the Treasure Within</title>
+  <meta name="description" content="Kingdom Para Para is a Spirit-led storehouse for the Body of Christ, offering devotionals, study tools, and inner healing resources to help believers walk in intimacy with Jesus and fullness of purpose.">
+  <meta property="og:title" content="Kingdom Para Para — Unlock the Treasure Within">
+  <meta property="og:description" content="Through prayer, intercession, and the healing power of the Holy Spirit, we help you uncover the riches God has already stored inside of you.">
+  <meta property="og:type" content="website">
+
+  <!-- Font declarations BEFORE Tailwind -->
+  <style>
+    @font-face {
+      font-family: 'Oranienbaum';
+      src: url('brand_identity/fonts/Oranienbaum-Regular.ttf') format('truetype');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Newsreader';
+      src: url('brand_identity/fonts/Newsreader_36pt-Light.ttf') format('truetype');
+      font-weight: 300;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Plus Jakarta Sans';
+      src: url('brand_identity/fonts/PlusJakartaSans-Light.ttf') format('truetype');
+      font-weight: 300;
+      font-style: normal;
+      font-display: swap;
+    }
+  </style>
+
+  <!-- Tailwind CSS 4.x CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style type="text/tailwindcss">
+    @theme {
+      --color-navy:       #0B234B;
+      --color-aqua:       #C1DAE1;
+      --color-terracotta: #A47562;
+      --color-gold:       #BF8B19;
+      --color-parchment:  #EDECE9;
+      --font-heading:     'Oranienbaum', Georgia, serif;
+      --font-sub:         'Newsreader', Georgia, serif;
+      --font-body:        'Plus Jakarta Sans', system-ui, sans-serif;
+    }
+
+    /* ── Base ─────────────────────────────────── */
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      font-weight: 300;
+      background-color: #EDECE9;
+      color: #0B234B;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* ── Grain overlay ────────────────────────── */
+    #grain {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      pointer-events: none;
+      opacity: 0.022;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 300px 300px;
+    }
+
+    /* ── Scroll reveal ────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(1.75rem);
+      transition: opacity 0.85s cubic-bezier(0.32, 0.72, 0, 1),
+                  transform 0.85s cubic-bezier(0.32, 0.72, 0, 1);
+    }
+    .reveal.is-visible { opacity: 1; transform: translateY(0); }
+    .reveal[data-delay="100"] { transition-delay: 0.1s; }
+    .reveal[data-delay="200"] { transition-delay: 0.2s; }
+    .reveal[data-delay="300"] { transition-delay: 0.3s; }
+    .reveal[data-delay="400"] { transition-delay: 0.4s; }
+    .reveal[data-delay="500"] { transition-delay: 0.5s; }
+
+    /* ── Double bezel — light surfaces ───────── */
+    .bezel {
+      background: rgba(11, 35, 75, 0.04);
+      border: 1px solid rgba(11, 35, 75, 0.09);
+      padding: 7px;
+      border-radius: 2rem;
+    }
+    .bezel-core {
+      border-radius: calc(2rem - 7px);
+      overflow: hidden;
+    }
+
+    /* ── Double bezel — dark surfaces ────────── */
+    .bezel-dark {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      padding: 7px;
+      border-radius: 2rem;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.07);
+    }
+    .bezel-dark-core {
+      border-radius: calc(2rem - 7px);
+      overflow: hidden;
+    }
+
+    /* ── Eyebrow tags ─────────────────────────── */
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 300;
+      font-size: 0.625rem;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      padding: 0.35rem 0.9rem;
+      border-radius: 9999px;
+      border: 1px solid rgba(11, 35, 75, 0.14);
+      color: rgba(11, 35, 75, 0.75);
+      background: rgba(11, 35, 75, 0.05);
+    }
+    .eyebrow-gold {
+      display: inline-flex;
+      align-items: center;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 300;
+      font-size: 0.625rem;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      padding: 0.35rem 0.9rem;
+      border-radius: 9999px;
+      border: 1px solid rgba(191, 139, 25, 0.35);
+      color: #BF8B19;
+      background: rgba(191, 139, 25, 0.08);
+    }
+
+    /* ── Buttons ──────────────────────────────── */
+    .btn-gold {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.7rem;
+      background: #BF8B19;
+      color: #fff;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 300;
+      font-size: 0.8125rem;
+      letter-spacing: 0.025em;
+      padding: 0.9rem 1.6rem;
+      border-radius: 9999px;
+      text-decoration: none;
+      transition: background 0.45s cubic-bezier(0.32,0.72,0,1),
+                  transform 0.3s cubic-bezier(0.32,0.72,0,1);
+    }
+    .btn-gold:hover { background: #a57816; transform: translateY(-1px); }
+    .btn-gold:active { transform: scale(0.975); }
+    .btn-gold .icon-ring {
+      display: flex; align-items: center; justify-content: center;
+      width: 1.875rem; height: 1.875rem; border-radius: 9999px;
+      background: rgba(255,255,255,0.18);
+      font-size: 0.875rem; line-height: 1;
+      transition: transform 0.3s cubic-bezier(0.32,0.72,0,1);
+    }
+    .btn-gold:hover .icon-ring { transform: translate(2px,-1px); }
+
+    .btn-outline {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.7rem;
+      background: transparent;
+      color: #0B234B;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 300;
+      font-size: 0.8125rem;
+      letter-spacing: 0.025em;
+      padding: 0.875rem 1.6rem;
+      border-radius: 9999px;
+      border: 1px solid rgba(11,35,75,0.28);
+      text-decoration: none;
+      transition: all 0.4s cubic-bezier(0.32,0.72,0,1);
+    }
+    .btn-outline:hover { background: rgba(11,35,75,0.06); border-color: rgba(11,35,75,0.5); }
+    .btn-outline .icon-ring {
+      display: flex; align-items: center; justify-content: center;
+      width: 1.875rem; height: 1.875rem; border-radius: 9999px;
+      border: 1px solid rgba(11,35,75,0.18);
+      font-size: 0.875rem; line-height: 1;
+      transition: transform 0.3s cubic-bezier(0.32,0.72,0,1);
+    }
+    .btn-outline:hover .icon-ring { transform: translate(2px,-1px); }
+
+    .btn-light {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.7rem;
+      background: #EDECE9;
+      color: #0B234B;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 300;
+      font-size: 0.8rem;
+      letter-spacing: 0.025em;
+      padding: 0.875rem 1.5rem;
+      border-radius: 9999px;
+      text-decoration: none;
+      transition: all 0.4s cubic-bezier(0.32,0.72,0,1);
+    }
+    .btn-light:hover { background: #fff; transform: translateY(-1px); }
+    .btn-light:active { transform: scale(0.975); }
+    .btn-light .icon-ring {
+      display: flex; align-items: center; justify-content: center;
+      width: 1.75rem; height: 1.75rem; border-radius: 9999px;
+      background: rgba(11,35,75,0.08);
+      font-size: 0.8rem; line-height: 1;
+      transition: transform 0.3s cubic-bezier(0.32,0.72,0,1);
+    }
+    .btn-light:hover .icon-ring { transform: translate(2px,-1px); }
+
+    .btn-text {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      color: #BF8B19;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 300;
+      font-size: 0.875rem;
+      text-decoration: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      transition: gap 0.35s cubic-bezier(0.32,0.72,0,1);
+    }
+    .btn-text:hover { gap: 0.75rem; }
+
+    /* ── Nav link ─────────────────────────────── */
+    .nav-link {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 300;
+      font-size: 0.775rem;
+      letter-spacing: 0.025em;
+      color: rgba(255,255,255,0.72);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    .nav-link:hover { color: #fff; }
+
+    /* ── Hamburger lines ──────────────────────── */
+    .ham-line {
+      display: block;
+      width: 20px;
+      height: 1.5px;
+      background: #fff;
+      transition: transform 0.35s cubic-bezier(0.32,0.72,0,1),
+                  opacity 0.35s cubic-bezier(0.32,0.72,0,1);
+    }
+
+    /* ── Mobile overlay links ─────────────────── */
+    .overlay-link {
+      font-family: 'Oranienbaum', serif;
+      font-size: clamp(2rem, 8vw, 3rem);
+      color: #fff;
+      text-decoration: none;
+      opacity: 0;
+      transform: translateY(1.5rem);
+      transition: opacity 0.5s cubic-bezier(0.32,0.72,0,1),
+                  transform 0.5s cubic-bezier(0.32,0.72,0,1),
+                  color 0.2s ease;
+    }
+    .overlay-link:hover { color: #BF8B19; }
+    #nav-overlay.open .overlay-link   { opacity: 1; transform: translateY(0); }
+    #nav-overlay.open .overlay-link:nth-child(1) { transition-delay: 0.06s; }
+    #nav-overlay.open .overlay-link:nth-child(2) { transition-delay: 0.11s; }
+    #nav-overlay.open .overlay-link:nth-child(3) { transition-delay: 0.16s; }
+    #nav-overlay.open .overlay-link:nth-child(4) { transition-delay: 0.21s; }
+    #nav-overlay.open .overlay-link:nth-child(5) { transition-delay: 0.26s; }
+
+    /* ── Marquee ──────────────────────────────── */
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+    .marquee-inner {
+      display: flex;
+      width: max-content;
+      animation: marquee 40s linear infinite;
+    }
+    .marquee-inner:hover { animation-play-state: paused; }
+
+    /* ── Pull quote ───────────────────────────── */
+    .pull-quote {
+      border-left: 2px solid #BF8B19;
+      padding-left: 1.375rem;
+      font-family: 'Newsreader', serif;
+      font-weight: 300;
+      font-style: italic;
+      font-size: 0.9375rem;
+      line-height: 1.75;
+      color: rgba(193,218,225,0.75);
+    }
+
+    /* ── Storehouse panels ────────────────────── */
+    .panel-fade::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, #0B234B 38%, rgba(11,35,75,0.45) 68%, transparent);
+      border-radius: inherit;
+      pointer-events: none;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Fixed grain layer -->
+  <div id="grain" aria-hidden="true"></div>
+
+  <!-- ═══════════════════════════════════════════
+       NAV
+  ═══════════════════════════════════════════ -->
+  <nav class="fixed top-0 left-0 right-0 z-50 flex justify-center pt-5 px-4" aria-label="Main navigation">
+    <div class="flex items-center gap-5 md:gap-8 bg-navy/90 backdrop-blur-2xl rounded-full pl-4 pr-3 py-2.5 border border-white/10 shadow-[0_8px_40px_rgba(11,35,75,0.3)]">
+      <a href="#" aria-label="Kingdom Para Para — home">
+        <img
+          src="brand_identity/logo/Kingdom Para Para_Primary Logo_Colour_3200x1800.svg"
+          alt="Kingdom Para Para"
+          class="h-8 w-auto block"
+          style="filter: brightness(0) invert(1);">
+      </a>
+
+      <div class="hidden md:flex items-center gap-6">
+        <a href="#about"      class="nav-link">About</a>
+        <a href="#pathways"   class="nav-link">Pathways</a>
+        <a href="#devotional" class="nav-link">Devotional</a>
+        <a href="#storehouse" class="nav-link">Storehouse</a>
+      </div>
+
+      <a href="#pathways" class="hidden md:inline-flex items-center bg-gold text-white rounded-full px-5 py-2 transition-all duration-300 hover:bg-[#a57816]"
+         style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:300;font-size:0.75rem;letter-spacing:0.05em;">
+        Begin Here
+      </a>
+
+      <button id="nav-toggle" class="md:hidden flex flex-col gap-[5px] items-center justify-center w-9 h-9 rounded-full border border-white/15"
+              aria-label="Toggle navigation" aria-expanded="false" aria-controls="nav-overlay">
+        <span class="ham-line" id="ham1"></span>
+        <span class="ham-line" id="ham2"></span>
+        <span class="ham-line" id="ham3"></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile overlay -->
+  <div id="nav-overlay"
+       class="fixed inset-0 z-40 bg-navy/95 backdrop-blur-3xl flex flex-col items-center justify-center gap-7 opacity-0 pointer-events-none transition-opacity duration-500"
+       aria-hidden="true">
+    <a href="#about"      class="overlay-link" onclick="closeNav()">About</a>
+    <a href="#pathways"   class="overlay-link" onclick="closeNav()">Pathways</a>
+    <a href="#devotional" class="overlay-link" onclick="closeNav()">Devotional</a>
+    <a href="#storehouse" class="overlay-link" onclick="closeNav()">Storehouse</a>
+    <a href="#pathways"   class="overlay-link" onclick="closeNav()">Begin Here</a>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════
+       SECTION 01 — HERO
+  ═══════════════════════════════════════════ -->
+  <section class="relative min-h-[100dvh] bg-parchment overflow-hidden flex items-center" id="hero">
+    <!-- Faint bg texture -->
+    <div class="absolute inset-0 bg-cover bg-center pointer-events-none opacity-[0.05]"
+         style="background-image:url('brand_identity/img/Terracotta%20Walls%20and%20Pots.jpg');"
+         aria-hidden="true"></div>
+
+    <div class="relative w-full max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-[1.2fr_1fr] gap-10 md:gap-16 items-center pt-36 pb-24 md:pt-40 md:pb-28">
+
+      <!-- Copy -->
+      <div>
+        <div class="reveal">
+          <span class="eyebrow">Welcome to Kingdom Para Para</span>
+        </div>
+
+        <h1 class="font-heading mt-7 leading-[1.06] tracking-tight text-navy reveal"
+            data-delay="100"
+            style="font-size:clamp(2.75rem,6vw,4.5rem);">
+          Your heart is a treasure&nbsp;chest.<br>
+          <span style="opacity:0.72;">It is time to unlock what God placed inside.</span>
+        </h1>
+
+        <p class="mt-7 leading-relaxed text-navy/60 max-w-[52ch] reveal" data-delay="200"
+           style="font-size:0.9375rem;">
+          You were created to walk in intimacy with Jesus and fullness of purpose. But somewhere along the way, life, pain, striving, and searching in the wrong places covered what God put in you. Kingdom Para Para exists to bring you back to the heart of Jesus. Through prayer, intercession, and the healing power of the Holy Spirit, we help you uncover the riches God has already stored inside of you.
+        </p>
+
+        <div class="mt-10 reveal" data-delay="300">
+          <a href="#pathways" class="btn-gold">
+            Unlock the Treasure Within
+            <span class="icon-ring">→</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Image -->
+      <div class="reveal relative" data-delay="150">
+        <div class="bezel">
+          <div class="bezel-core">
+            <img src="brand_identity/img/Treasure Chest in the Sand.jpg"
+                 alt="A treasure chest resting in the sand — representing the riches God has placed inside every believer"
+                 class="w-full object-cover block"
+                 style="aspect-ratio:3/4;object-position:center;">
+          </div>
+        </div>
+        <!-- Small inset accent -->
+        <div class="absolute -bottom-5 -left-5 w-24 h-24 bezel hidden md:block reveal" data-delay="400">
+          <div class="bezel-core h-full">
+            <img src="brand_identity/img/Clay Pots by Wall.jpg"
+                 alt=""
+                 class="w-full h-full object-cover block"
+                 aria-hidden="true">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════
+       SECTION 02 — TRUST BAR
+  ═══════════════════════════════════════════ -->
+  <div class="relative overflow-hidden border-y border-navy/10" role="region" aria-label="Who this is for">
+    <!-- Subtle photo texture -->
+    <div class="absolute inset-0 bg-cover bg-center opacity-[0.055]"
+         style="background-image:url('brand_identity/img/Rocks%20%26%20River.jpg');"
+         aria-hidden="true"></div>
+
+    <div class="relative overflow-hidden bg-parchment/85 py-5">
+      <div class="marquee-inner" aria-label="Trust statements">
+        <!-- Two sets for seamless loop -->
+        <span class="whitespace-nowrap px-12 text-navy/65 text-sm"
+              style="font-family:'Newsreader',serif;font-weight:300;font-style:italic;">
+          For the one who loves God and still feels stuck.
+        </span>
+        <span class="text-gold px-1 text-xs" aria-hidden="true">◆</span>
+        <span class="whitespace-nowrap px-12 text-navy/65 text-sm"
+              style="font-family:'Newsreader',serif;font-weight:300;font-style:italic;">
+          For the believer whose faith and everyday life do not yet feel connected.
+        </span>
+        <span class="text-gold px-1 text-xs" aria-hidden="true">◆</span>
+        <span class="whitespace-nowrap px-12 text-navy/65 text-sm"
+              style="font-family:'Newsreader',serif;font-weight:300;font-style:italic;">
+          For the one who keeps starting over and is ready for something to finally take root.
+        </span>
+        <span class="text-gold px-1 text-xs" aria-hidden="true">◆</span>
+        <!-- Duplicate -->
+        <span class="whitespace-nowrap px-12 text-navy/65 text-sm"
+              style="font-family:'Newsreader',serif;font-weight:300;font-style:italic;">
+          For the one who loves God and still feels stuck.
+        </span>
+        <span class="text-gold px-1 text-xs" aria-hidden="true">◆</span>
+        <span class="whitespace-nowrap px-12 text-navy/65 text-sm"
+              style="font-family:'Newsreader',serif;font-weight:300;font-style:italic;">
+          For the believer whose faith and everyday life do not yet feel connected.
+        </span>
+        <span class="text-gold px-1 text-xs" aria-hidden="true">◆</span>
+        <span class="whitespace-nowrap px-12 text-navy/65 text-sm"
+              style="font-family:'Newsreader',serif;font-weight:300;font-style:italic;">
+          For the one who keeps starting over and is ready for something to finally take root.
+        </span>
+        <span class="text-gold px-1 text-xs" aria-hidden="true">◆</span>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════
+       SECTION 03 — THE WELCOME
+  ═══════════════════════════════════════════ -->
+  <section class="bg-parchment py-28 md:py-40" id="about" aria-labelledby="welcome-h2">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="grid grid-cols-1 md:grid-cols-[5fr_7fr] gap-14 md:gap-20 items-start">
+
+        <!-- Images column -->
+        <div class="relative">
+          <div class="bezel reveal">
+            <div class="bezel-core">
+              <img src="brand_identity/img/Vessels and Arch 01.jpg"
+                   alt="Vessels beneath a stone arch — symbolising God's children sanctified and useful for the Master"
+                   class="w-full object-cover block"
+                   style="aspect-ratio:3/4;object-position:center;">
+            </div>
+          </div>
+          <!-- Floating secondary image -->
+          <div class="absolute -right-3 md:-right-8 bottom-20 w-32 md:w-40 bezel reveal" data-delay="300">
+            <div class="bezel-core">
+              <img src="brand_identity/img/Two Vessels.jpg"
+                   alt=""
+                   class="w-full object-cover block"
+                   style="aspect-ratio:1;object-position:center;"
+                   aria-hidden="true">
+            </div>
+          </div>
+        </div>
+
+        <!-- Text column -->
+        <div class="md:pt-6">
+          <div class="reveal">
+            <span class="eyebrow">A word from Sharique</span>
+          </div>
+
+          <h2 id="welcome-h2"
+              class="font-heading mt-6 leading-[1.08] tracking-tight text-navy reveal"
+              data-delay="100"
+              style="font-size:clamp(1.875rem,4vw,2.875rem);">
+            God first had to unlock the treasure in my heart in order for me to step into Kingdom impact.
+          </h2>
+
+          <div class="mt-8 space-y-5 text-navy/60 leading-relaxed reveal" data-delay="200"
+               style="font-size:0.9375rem;">
+            <p>As a registered nurse, I walked into rooms that held more than what any chart could capture. I cared for patients whose bodies were sick but whose spirits were crying out for something medicine could not prescribe. God would download things to me before I ever walked through the door. Sometimes in a dream the night before. Sometimes while reviewing a chart in the morning. Sometimes the moment I crossed the threshold of a room, I would feel His movement and I would move with Him.</p>
+            <p>I knew what I was carrying. What I did not know was that where I was serving was beginning to conflict with what God was trying to birth out of me.</p>
+            <p>He showed me in a dream that I was servicing an altar that was not His with a particular nursing situation. He told me plainly that my job was now interfering with my intercession.</p>
+
+            <div id="story-more" hidden>
+              <p>I did not want to hear it. I had finally found my footing as a nurse, finally learned how to walk in the grace of God on that floor. Through this instruction, my grace was shifting outside of the hospital. That is exactly when He said it was time to go.</p>
+              <p>I couldn't deny His conviction. The confirmation through dreams, secret places, and words from the Lord.</p>
+              <p>What I know now is that God will interrupt your comfort to protect His call through your life. He will close the door you have been gripping because He can see what is waiting on the other side of your yes.</p>
+              <p>In this season of my life, The Lord is downloading into my heart and mind, His wisdom to help cure diseases and showing me that it all leads back to the heart.</p>
+              <p>Out of the rubble and obedience to God, was Kingdom Para Para made new.</p>
+            </div>
+          </div>
+
+          <div class="mt-8 reveal" data-delay="300">
+            <button id="story-btn" class="btn-text" aria-expanded="false" aria-controls="story-more">
+              Read My Full Story <span id="story-arrow" aria-hidden="true">→</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════
+       SECTION 04 — BRAND SCRIPTURE
+  ═══════════════════════════════════════════ -->
+  <section class="relative bg-navy py-36 md:py-52 overflow-hidden" aria-label="Brand scripture">
+    <!-- Layered textures -->
+    <div class="absolute inset-0 bg-cover bg-center opacity-[0.07] pointer-events-none"
+         style="background-image:url('brand_identity/img/Still%20Waters.jpg');"
+         aria-hidden="true"></div>
+    <div class="absolute inset-0 bg-cover bg-center opacity-[0.04] pointer-events-none"
+         style="background-image:url('brand_identity/img/Olive%20Tree.jpg');"
+         aria-hidden="true"></div>
+
+    <div class="relative max-w-3xl mx-auto px-6 text-center">
+      <div class="reveal">
+        <span class="eyebrow-gold">The heartbeat of everything we do</span>
+      </div>
+
+      <blockquote class="mt-10 reveal" data-delay="150">
+        <p class="text-gold leading-relaxed"
+           style="font-family:'Newsreader',serif;font-weight:300;font-style:italic;font-size:clamp(1.375rem,3.5vw,2.125rem);">
+          "But we all, with unveiled face, beholding as in a mirror the glory of the Lord, are being transformed into the same image from glory to glory, just as by the Spirit of the Lord."
+        </p>
+        <footer class="mt-8">
+          <cite class="not-italic text-aqua/60 text-xs tracking-[0.2em] uppercase"
+                style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:300;">
+            II Corinthians 3:18 NKJV
+          </cite>
+        </footer>
+      </blockquote>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════
+       SECTION 05 — THE TWO WORLDS
+  ═══════════════════════════════════════════ -->
+  <section class="relative bg-parchment py-28 md:py-40 overflow-hidden" id="pathways" aria-labelledby="pathways-h2">
+    <div class="absolute inset-0 bg-cover bg-center opacity-[0.04] pointer-events-none"
+         style="background-image:url('brand_identity/img/Terracotta%20Pots%20in%20Wall.jpg');"
+         aria-hidden="true"></div>
+
+    <div class="relative max-w-7xl mx-auto px-6">
+
+      <!-- Intro -->
+      <div class="max-w-xl reveal">
+        <span class="eyebrow">Welcome to your treasure chest.</span>
+        <h2 id="pathways-h2"
+            class="font-heading mt-6 leading-[1.08] tracking-tight text-navy"
+            style="font-size:clamp(1.875rem,4vw,2.875rem);">
+          You are here because God is wanting to increase your treasures on Earth and in Heaven.
+        </h2>
+        <p class="mt-5 text-navy/58 leading-relaxed" style="font-size:0.9375rem;">
+          Kingdom Para Para exists to help you uncover everything God has already placed inside of you. There are fragments in the heart that have been left untouched, covered by life, by pain, by searching in the wrong places. Through prayer, intercession, and the Word of God, those fragments are healed and filled with the Holy Spirit so you can walk in the wholeness you were always created for.
+        </p>
+        <p class="mt-4 text-navy/58 leading-relaxed" style="font-size:0.9375rem;">
+          There are two communities of women I help.
+        </p>
+      </div>
+
+      <!-- Cards — asymmetric: left card wider + higher, right offset down -->
+      <div class="mt-16 grid grid-cols-1 md:grid-cols-[1.15fr_1fr] gap-6">
+
+        <!-- Card 01 — Nurse Faith Academy -->
+        <article class="reveal" data-delay="100">
+          <div class="bezel h-full">
+            <div class="bezel-core h-full flex flex-col bg-parchment">
+              <div class="relative overflow-hidden" style="aspect-ratio:16/9;flex-shrink:0;">
+                <img src="brand_identity/img/Ivory Vessel with Grapes.jpg"
+                     alt="An ivory vessel with grapes — representing the gifts carried by nurses called by God"
+                     class="w-full h-full object-cover block">
+                <div class="absolute inset-0" style="background:linear-gradient(to bottom,transparent 60%,rgba(11,35,75,0.35));"></div>
+              </div>
+              <div class="p-8 md:p-10 flex flex-col flex-grow">
+                <span class="eyebrow">Nurse Faith Academy</span>
+                <h3 class="font-heading mt-5 text-navy leading-tight"
+                    style="font-size:clamp(1.5rem,2.5vw,1.875rem);">
+                  You are called to have bold faith even while on the floor.
+                </h3>
+                <p class="mt-4 text-navy/58 leading-relaxed" style="font-size:0.875rem;">
+                  You did not walk into that hospital by accident. God placed you there on purpose, in that unit, on that shift, in that room, for that patient. You are not just a nurse. You are a carrier of His presence in one of the most spiritually warring environments on earth.
+                </p>
+                <p class="mt-3 text-navy/58 leading-relaxed" style="font-size:0.875rem;">
+                  There are jewels inside of you that were forged specifically for that floor — gifts of discernment, intercession, and healing that go far beyond anything your nursing license covers. Nurse Faith Academy is where those jewels get unlocked so you can heal your patients on Earth as it is in Heaven through the power of the Holy Spirit.
+                </p>
+                <div class="mt-auto pt-8">
+                  <a href="#" class="btn-gold">
+                    Unlock my treasure. I am a nurse.
+                    <span class="icon-ring">→</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 02 — Inner Wealth Mentorship (offset down on desktop) -->
+        <article class="reveal md:mt-14" data-delay="200">
+          <div class="bezel h-full">
+            <div class="bezel-core h-full flex flex-col bg-parchment">
+              <div class="relative overflow-hidden" style="aspect-ratio:16/9;flex-shrink:0;">
+                <img src="brand_identity/img/Different Vessels.jpg"
+                     alt="Different vessels — representing the diverse forms of God's calling for those building their kingdom assignment"
+                     class="w-full h-full object-cover block">
+                <div class="absolute inset-0" style="background:linear-gradient(to bottom,transparent 60%,rgba(11,35,75,0.35));"></div>
+              </div>
+              <div class="p-8 md:p-10 flex flex-col flex-grow">
+                <span class="eyebrow">Inner Wealth Mentorship</span>
+                <h3 class="font-heading mt-5 text-navy leading-tight"
+                    style="font-size:clamp(1.5rem,2.5vw,1.875rem);">
+                  You were not just called to build a business. You were called to build from a healed heart.
+                </h3>
+                <p class="mt-4 text-navy/58 leading-relaxed" style="font-size:0.875rem;">
+                  The gaps in your business are not a strategy problem. They are a heart problem. God revealed to me that you can only build to the stability He has made resident inside of you — every unhealed place, every old wound, every person you never forgave, it is all showing up in your boardroom, your team, your decisions, and your results.
+                </p>
+                <p class="mt-3 text-navy/58 leading-relaxed" style="font-size:0.875rem;">
+                  Inner Wealth Mentorship is where your healing, kingdom assignment and your business become the same conversation. Through intercession, prayer, the word of God and prophetic insight, the fragments get healed, and you begin to build with God from His heart through yours the way He always intended.
+                </p>
+                <div class="mt-auto pt-8">
+                  <a href="#" class="btn-outline">
+                    Unlock my treasure. I am ready to build.
+                    <span class="icon-ring">→</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════
+       SECTION 06 — THE HEART DEVOTIONAL
+  ═══════════════════════════════════════════ -->
+  <section class="relative bg-navy py-28 md:py-40 overflow-hidden" id="devotional" aria-labelledby="devotional-h2">
+    <div class="absolute inset-0 bg-cover bg-center opacity-[0.06] pointer-events-none"
+         style="background-image:url('brand_identity/img/Terracotta%20Vessels.jpg');"
+         aria-hidden="true"></div>
+
+    <div class="relative max-w-7xl mx-auto px-6">
+      <div class="grid grid-cols-1 md:grid-cols-[5fr_6fr] gap-12 md:gap-20 items-center">
+
+        <!-- Book image -->
+        <div class="relative reveal">
+          <div class="bezel-dark">
+            <div class="bezel-dark-core">
+              <img src="brand_identity/img/Treasure Chest 01.jpg"
+                   alt="Matters of the Heart — a 40-day devotional for heart transformation"
+                   class="w-full object-cover block"
+                   style="aspect-ratio:3/4;object-position:center;">
+            </div>
+          </div>
+          <!-- Small accent -->
+          <div class="absolute -bottom-5 -right-3 md:-right-6 w-28 md:w-36 bezel-dark hidden md:block reveal" data-delay="300">
+            <div class="bezel-dark-core">
+              <img src="brand_identity/img/Treasure Chest 02.jpg"
+                   alt=""
+                   class="w-full object-cover block"
+                   style="aspect-ratio:1;object-position:center;"
+                   aria-hidden="true">
+            </div>
+          </div>
+        </div>
+
+        <!-- Copy -->
+        <div>
+          <div class="reveal">
+            <span class="eyebrow-gold">A 40-day heart devotional for your quiet time with Jesus.</span>
+          </div>
+
+          <h2 id="devotional-h2"
+              class="font-heading mt-6 leading-tight tracking-tight text-white reveal"
+              data-delay="100"
+              style="font-size:clamp(1.875rem,4vw,2.875rem);">
+            Matters of the Heart: A Fruitful Heart Transformation Devotional
+          </h2>
+
+          <div class="mt-7 space-y-4 text-aqua/65 leading-relaxed reveal" data-delay="200"
+               style="font-size:0.9375rem;">
+            <p>This is not your typical devotional.</p>
+            <p>Matters of the Heart is a 40-day intimate journey into the deepest places of your heart, the places where transformation begins and the presence of God dwells. Every day you will examine a different condition of the heart through the lens of Scripture. From the hardened heart to the pure heart. From the wounded heart to the surrendered heart. From the bitter heart to the grateful heart.</p>
+            <p>With the Holy Spirit as your partner, this devotional becomes a spiritual mirror. Not to condemn what it reflects, but to restore it.</p>
+            <p>This is where every mentorship journey at Kingdom Para Para begins. Because you can only go as far as your heart has been healed.</p>
+          </div>
+
+          <!-- Pull quote -->
+          <blockquote class="pull-quote mt-10 reveal" data-delay="300">
+            "This book is amazing. I believe that this author is on a mission to change lives for the better. She is truly submitted to the Holy Spirit. This is helping me with heart transformation."
+            <footer class="mt-3 not-italic text-aqua/40 text-xs tracking-[0.15em] uppercase"
+                    style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:300;">
+              — Verified Amazon Reviewer, January 2026
+            </footer>
+          </blockquote>
+
+          <div class="mt-10 reveal" data-delay="400">
+            <a href="#" class="btn-gold">
+              Get Matters of the Heart on Amazon
+              <span class="icon-ring">↗</span>
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════
+       SECTION 07 — STOREHOUSE PREVIEW
+  ═══════════════════════════════════════════ -->
+  <section class="bg-parchment py-28 md:py-40" id="storehouse" aria-labelledby="storehouse-h2">
+    <div class="max-w-7xl mx-auto px-6">
+
+      <div class="text-center max-w-2xl mx-auto reveal">
+        <span class="eyebrow">There is more waiting for you here.</span>
+        <h2 id="storehouse-h2"
+            class="font-heading mt-6 text-navy leading-tight tracking-tight"
+            style="font-size:clamp(2rem,4.5vw,3.25rem);">
+          The storehouse is full. Come and take what belongs to you.
+        </h2>
+      </div>
+
+      <div class="mt-16 grid grid-cols-1 md:grid-cols-[55fr_45fr] gap-5">
+
+        <!-- Resources panel -->
+        <div class="reveal relative rounded-[2rem] overflow-hidden panel-fade" style="min-height:500px;" data-delay="100">
+          <img src="brand_identity/img/Field of Grain.jpg"
+               alt="A golden field of grain — representing the abundant resources in Kingdom Para Para's storehouse"
+               class="absolute inset-0 w-full h-full object-cover block">
+          <div class="absolute bottom-0 left-0 right-0 p-8 md:p-10 z-10">
+            <span class="eyebrow-gold">Resources</span>
+            <p class="mt-3 text-aqua/75 leading-relaxed" style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:300;font-size:0.875rem;max-width:44ch;">
+              Devotionals, teachings, ebooks, and tools to equip you for every season God takes you through. Everything here was created to help you go deeper, build stronger, and walk freer.
+            </p>
+            <a href="#" class="btn-light mt-6 inline-flex">
+              Explore the Resources
+              <span class="icon-ring">→</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Community panel -->
+        <div class="reveal relative rounded-[2rem] overflow-hidden panel-fade" style="min-height:500px;" data-delay="200">
+          <img src="brand_identity/img/Planted.jpg"
+               alt="Trees planted by the water — representing the Kingdom Para Para community rooted in faith"
+               class="absolute inset-0 w-full h-full object-cover block">
+          <div class="absolute bottom-0 left-0 right-0 p-8 md:p-10 z-10">
+            <span class="eyebrow-gold">Community</span>
+            <p class="mt-3 text-aqua/75 leading-relaxed" style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:300;font-size:0.875rem;max-width:40ch;">
+              You were not meant to do this alone. Join a growing community of believers who are serious about intimacy with God, identity in Christ, and building lives and businesses that are registered in heaven first.
+            </p>
+            <a href="#" class="btn-light mt-6 inline-flex">
+              Join the Community
+              <span class="icon-ring">→</span>
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════
+       SECTION 08 — FOOTER CTA
+  ═══════════════════════════════════════════ -->
+  <section class="relative bg-navy py-36 md:py-52 overflow-hidden" aria-labelledby="footer-cta-h2">
+    <div class="absolute inset-0 bg-cover bg-center opacity-[0.055] pointer-events-none"
+         style="background-image:url('brand_identity/img/Treasure%20Chest%2003.jpg');"
+         aria-hidden="true"></div>
+    <div class="absolute inset-0 bg-cover bg-center opacity-[0.04] pointer-events-none"
+         style="background-image:url('brand_identity/img/Vessels%20on%20a%20Rooftop.jpg');"
+         aria-hidden="true"></div>
+
+    <div class="relative max-w-2xl mx-auto px-6 text-center">
+      <div class="reveal">
+        <h2 id="footer-cta-h2"
+            class="font-heading text-white leading-tight tracking-tight"
+            style="font-size:clamp(2.25rem,5.5vw,3.75rem);">
+          Your next season is carrying more than you know.
+        </h2>
+      </div>
+
+      <div class="mt-8 space-y-5 text-aqua/65 leading-relaxed reveal" data-delay="150"
+           style="font-size:0.9375rem;">
+        <p>You do not have to keep walking around with a heart full of things that were never meant to stay there. The disappointments. The cycles. The weight of searching for something you could never quite name. God sees every crack. He knows every void. And He has been waiting for you to find a place where those places finally get healed.</p>
+        <p style="font-family:'Newsreader',serif;font-weight:300;font-style:italic;color:rgba(193,218,225,0.85);font-size:1.125rem;">
+          This is that place.
+        </p>
+        <p>Whatever brought you here today, God is already ahead of it. There is breakthrough waiting on the other side of a healed heart and Kingdom Para Para exists to walk you there.</p>
+        <p style="font-family:'Newsreader',serif;font-weight:300;font-style:italic;color:rgba(193,218,225,0.85);font-size:1.125rem;">
+          Come on in. The door is open.
+        </p>
+      </div>
+
+      <div class="mt-12 reveal" data-delay="300">
+        <a href="#pathways" class="btn-gold" style="padding:1.1rem 2rem;font-size:0.875rem;">
+          Unlock the Treasure Within
+          <span class="icon-ring">→</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════
+       FOOTER
+  ═══════════════════════════════════════════ -->
+  <footer class="bg-navy border-t border-white/10" aria-label="Site footer">
+    <!-- Thin image accent bar -->
+    <div class="relative h-px overflow-hidden">
+      <div class="absolute inset-0 bg-cover bg-center opacity-20"
+           style="background-image:url('brand_identity/img/Bread%2001.jpg');"
+           aria-hidden="true"></div>
+      <div class="absolute inset-0"
+           style="background:linear-gradient(to right,#0B234B,transparent 40%,transparent 60%,#0B234B);"
+           aria-hidden="true"></div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-6 py-16 md:py-20">
+      <div class="grid grid-cols-1 md:grid-cols-[2.5fr_1fr_1fr] gap-12 md:gap-8">
+
+        <!-- Brand -->
+        <div>
+          <img src="brand_identity/logo/Kingdom Para Para_Primary Logo_Colour_3200x1800.svg"
+               alt="Kingdom Para Para"
+               class="h-9 w-auto block mb-5"
+               style="filter:brightness(0) invert(1);">
+          <p class="text-aqua/50 text-sm leading-relaxed max-w-[36ch]"
+             style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:300;">
+            A Spirit-led storehouse for the Body of Christ, offering devotionals, study tools, and inner healing resources to help believers walk in intimacy with Jesus and fullness of purpose.
+          </p>
+          <p class="mt-5 text-white/25 text-xs"
+             style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:300;">
+            Brand identity by
+            <a href="https://www.marieenro.com"
+               target="_blank"
+               rel="noopener noreferrer"
+               class="transition-colors duration-200 hover:text-aqua/60">Marie Enro</a>
+          </p>
+        </div>
+
+        <!-- Navigate -->
+        <div>
+          <h3 class="text-white/30 text-xs uppercase tracking-[0.2em] mb-5"
+              style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:300;">Navigate</h3>
+          <nav aria-label="Footer navigation">
+            <ul class="space-y-3">
+              <li><a href="#about"      class="text-aqua/50 text-sm hover:text-aqua/85 transition-colors duration-200" style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:300;">About</a></li>
+              <li><a href="#pathways"   class="text-aqua/50 text-sm hover:text-aqua/85 transition-colors duration-200" style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:300;">Pathways</a></li>
+              <li><a href="#devotional" class="text-aqua/50 text-sm hover:text-aqua/85 transition-colors duration-200" style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:300;">Devotional</a></li>
+              <li><a href="#storehouse" class="text-aqua/50 text-sm hover:text-aqua/85 transition-colors duration-200" style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:300;">Storehouse</a></li>
+            </ul>
+          </nav>
+        </div>
+
+        <!-- Legal -->
+        <div>
+          <h3 class="text-white/30 text-xs uppercase tracking-[0.2em] mb-5"
+              style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:300;">Legal</h3>
+          <ul class="space-y-3">
+            <li><a href="#" class="text-aqua/50 text-sm hover:text-aqua/85 transition-colors duration-200" style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:300;">Privacy Policy</a></li>
+            <li><a href="#" class="text-aqua/50 text-sm hover:text-aqua/85 transition-colors duration-200" style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:300;">Terms of Service</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- Bottom row -->
+      <div class="mt-14 pt-6 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-3">
+        <p class="text-white/25 text-xs"
+           style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:300;">
+          © 2025 Kingdom Para Para. All rights reserved.
+        </p>
+        <p class="text-white/18 text-xs"
+           style="font-family:'Newsreader',serif;font-weight:300;font-style:italic;">
+          II Timothy 2:21
+        </p>
+      </div>
+    </div>
+  </footer>
+
+
+  <!-- ═══════════════════════════════════════════
+       SCRIPTS
+  ═══════════════════════════════════════════ -->
+  <script>
+    'use strict';
+
+    /* ── Smooth-scroll for anchor links ─── */
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', function (e) {
+        const id = this.getAttribute('href');
+        if (id === '#') return;
+        const target = document.querySelector(id);
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+
+    /* ── Mobile nav ──────────────────────── */
+    const toggle  = document.getElementById('nav-toggle');
+    const overlay = document.getElementById('nav-overlay');
+    const ham1    = document.getElementById('ham1');
+    const ham2    = document.getElementById('ham2');
+    const ham3    = document.getElementById('ham3');
+    let   navOpen = false;
+
+    function openNav() {
+      navOpen = true;
+      ham1.style.transform = 'translateY(6.5px) rotate(45deg)';
+      ham2.style.opacity   = '0';
+      ham3.style.transform = 'translateY(-6.5px) rotate(-45deg)';
+      overlay.classList.remove('opacity-0', 'pointer-events-none');
+      overlay.classList.add('opacity-100', 'open');
+      overlay.setAttribute('aria-hidden', 'false');
+      toggle.setAttribute('aria-expanded', 'true');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeNav() {
+      navOpen = false;
+      ham1.style.transform = '';
+      ham2.style.opacity   = '';
+      ham3.style.transform = '';
+      overlay.classList.add('opacity-0', 'pointer-events-none');
+      overlay.classList.remove('opacity-100', 'open');
+      overlay.setAttribute('aria-hidden', 'true');
+      toggle.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+    }
+
+    toggle.addEventListener('click', () => navOpen ? closeNav() : openNav());
+    document.addEventListener('keydown', e => { if (e.key === 'Escape' && navOpen) closeNav(); });
+
+    /* ── Scroll reveals ──────────────────── */
+    const revealEls = document.querySelectorAll('.reveal');
+    const revealObs = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          revealObs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+    revealEls.forEach(el => revealObs.observe(el));
+
+    /* ── Story expand ────────────────────── */
+    const storyBtn  = document.getElementById('story-btn');
+    const storyMore = document.getElementById('story-more');
+
+    if (storyBtn && storyMore) {
+      storyBtn.addEventListener('click', () => {
+        const open = storyBtn.getAttribute('aria-expanded') === 'true';
+        if (open) {
+          storyMore.hidden = true;
+          storyBtn.setAttribute('aria-expanded', 'false');
+          storyBtn.innerHTML = 'Read My Full Story <span aria-hidden="true">→</span>';
+        } else {
+          storyMore.hidden = false;
+          storyBtn.setAttribute('aria-expanded', 'true');
+          storyBtn.innerHTML = 'Read Less <span aria-hidden="true">↑</span>';
+        }
+      });
+    }
+  </script>
+
+</body>
+</html>
