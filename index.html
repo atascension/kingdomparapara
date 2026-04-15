@@ -326,6 +326,11 @@
     }
 
   </style>
+
+  <!-- Preload first 3 animation frames so frame 1 renders before JS executes -->
+  <link rel="preload" as="image" href="brand_identity/video/frames/frame_0001.webp">
+  <link rel="preload" as="image" href="brand_identity/video/frames/frame_0002.webp">
+  <link rel="preload" as="image" href="brand_identity/video/frames/frame_0003.webp">
 </head>
 
 <body>
@@ -1063,6 +1068,7 @@
     (function () {
       const canvas      = document.getElementById('heart-canvas');
       const ctx         = canvas && canvas.getContext('2d');
+      if (ctx) { ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = 'high'; }
       const nav         = document.getElementById('main-nav');
       const scrollHint  = document.getElementById('scroll-hint');
       const introFade   = document.getElementById('intro-fade');
@@ -1072,27 +1078,46 @@
 
       if (!canvas || !ctx || !nav) return;
 
-      const TOTAL  = 121;
+      const TOTAL       = 121;
+      const EARLY_START = 25;  // allow scrubbing once first 25 frames are ready
       const frames = new Array(TOTAL);
-      let loaded        = 0;
-      let lastIdx       = -1;
-      let introComplete = false;
+      let loaded               = 0;
+      let lastIdx              = -1;
+      let introComplete        = false;
+      let scrollTriggerStarted = false;
 
-      // Size canvas to the full viewport (logical pixels — GPU handles display scaling)
+      // Size canvas to physical pixels so it stays sharp on HiDPI / Retina displays.
       function resizeCanvas() {
-        canvas.width  = window.innerWidth;
-        canvas.height = window.innerHeight;
+        const dpr = window.devicePixelRatio || 1;
+        canvas.width  = Math.round(window.innerWidth  * dpr);
+        canvas.height = Math.round(window.innerHeight * dpr);
+        // Resizing the canvas buffer resets context state — re-apply quality hints.
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = 'high';
         const redrawIdx = Math.max(0, lastIdx);
         lastIdx = -1; // force redraw after resize even if same frame index
         render(redrawIdx);
       }
 
       // Draw a single frame using object-fit:cover math so it fills edge-to-edge.
+      // If the requested frame isn't loaded yet, falls back to the nearest earlier frame.
       function render(idx) {
         if (idx === lastIdx) return;
-        lastIdx = idx;
-        const img = frames[idx];
-        if (!img || !img.complete || !img.naturalWidth) return;
+
+        // Find nearest earlier loaded frame if this one isn't ready yet
+        let drawIdx = idx;
+        if (!frames[idx] || !frames[idx].complete || !frames[idx].naturalWidth) {
+          for (let i = idx - 1; i >= 0; i--) {
+            if (frames[i] && frames[i].complete && frames[i].naturalWidth) {
+              drawIdx = i; break;
+            }
+          }
+          if (drawIdx === idx) return; // nothing available yet
+        }
+
+        if (drawIdx === lastIdx) return;
+        lastIdx = drawIdx;
+        const img = frames[drawIdx];
 
         const cw = canvas.width,  ch = canvas.height;
         const iw = img.naturalWidth, ih = img.naturalHeight;
@@ -1100,6 +1125,7 @@
         const x = (cw - iw * scale) / 2;
         const y = (ch - ih * scale) / 2;
 
+        ctx.clearRect(0, 0, cw, ch);
         ctx.drawImage(img, x, y, iw * scale, ih * scale);
       }
 
@@ -1157,6 +1183,8 @@
       }
 
       function initScrollTrigger() {
+        if (scrollTriggerStarted) return;
+        scrollTriggerStarted = true;
         render(0);
 
         ScrollTrigger.create({
@@ -1209,12 +1237,17 @@
           if (loadBar) loadBar.style.width = ((loaded / TOTAL) * 100) + '%';
           if (loaded === 1) { resizeCanvas(); render(0); }
 
+          // Allow scrubbing once the first batch is ready — rest loads in background
+          if (loaded === EARLY_START) {
+            initScrollTrigger();
+          }
+
+          // Hide loading overlay once all frames are available
           if (loaded === TOTAL) {
             if (loadOverlay) {
               loadOverlay.style.opacity = '0';
               setTimeout(() => { loadOverlay.style.display = 'none'; }, 700);
             }
-            initScrollTrigger();
           }
         };
         img.onerror = function () {
@@ -1225,7 +1258,7 @@
               loadOverlay.style.opacity = '0';
               setTimeout(() => { loadOverlay.style.display = 'none'; }, 700);
             }
-            initScrollTrigger();
+            initScrollTrigger(); // guard inside initScrollTrigger prevents double-init
           }
         };
         img.src = 'brand_identity/video/frames/frame_' + num + '.webp';
