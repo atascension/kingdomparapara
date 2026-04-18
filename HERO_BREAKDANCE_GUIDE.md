@@ -973,124 +973,113 @@ A full-width band that sits immediately below the Hero, separated by a subtle to
 
 ## How This Approach Works on Free
 
-Breakdance's **CSS Classes** field (where you assign class names to elements) is a Pro feature. This build avoids it entirely by:
+Breakdance free does not allow Global Styles → Custom CSS, per-element Custom CSS, or the CSS Classes field — all of those require Pro. This build uses **none of them**. Instead:
 
-1. Putting all CSS in **Global Styles → Custom CSS** — free on all plans
-2. Building the entire trust bar inside a single **Rich Text** element in Source HTML mode — the HTML markup uses class attributes directly, which is standard HTML, not Breakdance's CSS Classes field
+- All styling is done with **inline `style=""` attributes** directly inside the HTML
+- The scrolling animation is driven by a small **JavaScript snippet** embedded in the same block
+- The entire trust bar lives in a single **Code** element, which outputs raw HTML exactly as written
 
-No per-element Custom CSS, no CSS Classes field. One Global CSS block, one element.
+No CSS classes. No custom CSS of any kind. One element, fully self-contained.
 
 ---
 
 ## Element Structure Overview
 
 ```
-1. Rich Text  ←  entire trust bar (self-contained HTML using Global CSS classes)
+1. Code element  ←  entire trust bar (inline styles + inline JS, no CSS classes)
 ```
 
-That is the entire build — one element.
+One element. Nothing else needed.
 
 ---
 
-## Step 1 — Add Global CSS
+## Which Breakdance Element to Use
 
-Go to **Breakdance → Global Styles → Custom CSS** and add the following block. Do this once before placing the element.
+In the Breakdance canvas, look for the element called **Code** (sometimes labelled **HTML** or **Embed** depending on your version). It is in the free element library. This element outputs its content as raw HTML without WordPress sanitising it — meaning `<div>`, `<script>`, and inline styles all survive exactly as written.
 
-```css
-/* ── Section 02 — Trust Bar ─────────────────────────────── */
-
-@keyframes kpp-marquee {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
-}
-
-/* Outer wrapper — borders, overflow, texture pseudo-element */
-.kpp-trust-bar {
-  position: relative;
-  overflow: hidden;
-  border-top: 1px solid rgba(11, 35, 75, 0.10);
-  border-bottom: 1px solid rgba(11, 35, 75, 0.10);
-}
-
-/* Parchment strip — sits above the texture */
-.kpp-marquee-strip {
-  position: relative;
-  overflow: hidden;
-  background-color: rgba(237, 236, 233, 0.85);
-  padding: 1.25rem 0;
-}
-
-/* Scrolling inner row */
-.kpp-marquee {
-  display: flex;
-  align-items: center;
-  width: max-content;
-  animation: kpp-marquee 40s linear infinite;
-}
-
-.kpp-marquee:hover {
-  animation-play-state: paused;
-}
-```
+Do **not** use Rich Text for this — WordPress's content editor strips `<div>` tags and `<script>` tags from Rich Text content.
 
 ---
 
-## Step 2 — Rich Text (Entire Trust Bar)
+## Step 1 — Add the Code Element
 
-Add a **Rich Text** element directly after your Hero Section. When it opens in the Breakdance panel, click the **Source** button (`<>`) in the toolbar to switch to HTML mode. Delete any placeholder content, then paste the following exactly.
+1. Open your page in the Breakdance canvas
+2. Click **+** directly after your Hero Section
+3. Search for **Code** (or **HTML** / **Embed**) and add it
+4. In the element's content field, delete any placeholder text
+5. Paste the full block below
 
-Replace `PASTE_YOUR_ROCKS_AND_RIVER_IMAGE_URL_HERE` with the WordPress media URL for **Rocks & River** after uploading it — keep the quotes around it.
+---
+
+## Step 2 — Paste the Complete Markup
+
+Replace `PASTE_YOUR_ROCKS_AND_RIVER_IMAGE_URL_HERE` with the WordPress media URL for **Rocks & River** after uploading it. Keep the single quotes around the URL exactly as shown.
 
 ```html
-<div class="kpp-trust-bar">
+<div id="kpp-tb" style="position:relative;overflow:hidden;border-top:1px solid rgba(11,35,75,0.10);border-bottom:1px solid rgba(11,35,75,0.10);">
 
-  <!-- Photographic texture at low opacity, sits behind the parchment strip -->
-  <div style="position:absolute;inset:0;background-image:url('PASTE_YOUR_ROCKS_AND_RIVER_IMAGE_URL_HERE');background-size:cover;background-position:center;opacity:0.055;pointer-events:none;"></div>
+  <!-- Photographic texture at low opacity -->
+  <div style="position:absolute;top:0;right:0;bottom:0;left:0;background-image:url('PASTE_YOUR_ROCKS_AND_RIVER_IMAGE_URL_HERE');background-size:cover;background-position:center;opacity:0.055;pointer-events:none;"></div>
 
-  <div class="kpp-marquee-strip">
-    <div class="kpp-marquee" aria-label="Trust statements">
+  <!-- Parchment strip -->
+  <div style="position:relative;overflow:hidden;background-color:rgba(237,236,233,0.85);padding:1.25rem 0;">
+
+    <!-- Scrolling track — JS targets this by ID -->
+    <div id="kpp-tb-track" style="display:flex;align-items:center;width:max-content;will-change:transform;">
 
       <!-- ── Set 1 ───────────────────────────────── -->
-      <span style="white-space:nowrap;padding-left:3rem;padding-right:3rem;color:rgba(11,35,75,0.65);font-family:'Newsreader',serif;font-weight:300;font-style:italic;font-size:0.9375rem;">
-        For the one who loves God and still feels stuck.
-      </span>
-      <span style="color:#BF8B19;padding-left:0.25rem;padding-right:0.25rem;font-size:0.75rem;" aria-hidden="true">◆</span>
+      <span style="white-space:nowrap;padding:0 3rem;color:rgba(11,35,75,0.65);font-family:'Newsreader',serif;font-weight:300;font-style:italic;font-size:0.9375rem;">For the one who loves God and still feels stuck.</span>
+      <span style="color:#BF8B19;padding:0 0.25rem;font-size:0.75rem;" aria-hidden="true">◆</span>
 
-      <span style="white-space:nowrap;padding-left:3rem;padding-right:3rem;color:rgba(11,35,75,0.65);font-family:'Newsreader',serif;font-weight:300;font-style:italic;font-size:0.9375rem;">
-        For the believer whose faith and everyday life do not yet feel connected.
-      </span>
-      <span style="color:#BF8B19;padding-left:0.25rem;padding-right:0.25rem;font-size:0.75rem;" aria-hidden="true">◆</span>
+      <span style="white-space:nowrap;padding:0 3rem;color:rgba(11,35,75,0.65);font-family:'Newsreader',serif;font-weight:300;font-style:italic;font-size:0.9375rem;">For the believer whose faith and everyday life do not yet feel connected.</span>
+      <span style="color:#BF8B19;padding:0 0.25rem;font-size:0.75rem;" aria-hidden="true">◆</span>
 
-      <span style="white-space:nowrap;padding-left:3rem;padding-right:3rem;color:rgba(11,35,75,0.65);font-family:'Newsreader',serif;font-weight:300;font-style:italic;font-size:0.9375rem;">
-        For the one who keeps starting over and is ready for something to finally take root.
-      </span>
-      <span style="color:#BF8B19;padding-left:0.25rem;padding-right:0.25rem;font-size:0.75rem;" aria-hidden="true">◆</span>
+      <span style="white-space:nowrap;padding:0 3rem;color:rgba(11,35,75,0.65);font-family:'Newsreader',serif;font-weight:300;font-style:italic;font-size:0.9375rem;">For the one who keeps starting over and is ready for something to finally take root.</span>
+      <span style="color:#BF8B19;padding:0 0.25rem;font-size:0.75rem;" aria-hidden="true">◆</span>
 
       <!-- ── Set 2 (duplicate — required for seamless loop) ── -->
-      <span style="white-space:nowrap;padding-left:3rem;padding-right:3rem;color:rgba(11,35,75,0.65);font-family:'Newsreader',serif;font-weight:300;font-style:italic;font-size:0.9375rem;">
-        For the one who loves God and still feels stuck.
-      </span>
-      <span style="color:#BF8B19;padding-left:0.25rem;padding-right:0.25rem;font-size:0.75rem;" aria-hidden="true">◆</span>
+      <span style="white-space:nowrap;padding:0 3rem;color:rgba(11,35,75,0.65);font-family:'Newsreader',serif;font-weight:300;font-style:italic;font-size:0.9375rem;">For the one who loves God and still feels stuck.</span>
+      <span style="color:#BF8B19;padding:0 0.25rem;font-size:0.75rem;" aria-hidden="true">◆</span>
 
-      <span style="white-space:nowrap;padding-left:3rem;padding-right:3rem;color:rgba(11,35,75,0.65);font-family:'Newsreader',serif;font-weight:300;font-style:italic;font-size:0.9375rem;">
-        For the believer whose faith and everyday life do not yet feel connected.
-      </span>
-      <span style="color:#BF8B19;padding-left:0.25rem;padding-right:0.25rem;font-size:0.75rem;" aria-hidden="true">◆</span>
+      <span style="white-space:nowrap;padding:0 3rem;color:rgba(11,35,75,0.65);font-family:'Newsreader',serif;font-weight:300;font-style:italic;font-size:0.9375rem;">For the believer whose faith and everyday life do not yet feel connected.</span>
+      <span style="color:#BF8B19;padding:0 0.25rem;font-size:0.75rem;" aria-hidden="true">◆</span>
 
-      <span style="white-space:nowrap;padding-left:3rem;padding-right:3rem;color:rgba(11,35,75,0.65);font-family:'Newsreader',serif;font-weight:300;font-style:italic;font-size:0.9375rem;">
-        For the one who keeps starting over and is ready for something to finally take root.
-      </span>
-      <span style="color:#BF8B19;padding-left:0.25rem;padding-right:0.25rem;font-size:0.75rem;" aria-hidden="true">◆</span>
+      <span style="white-space:nowrap;padding:0 3rem;color:rgba(11,35,75,0.65);font-family:'Newsreader',serif;font-weight:300;font-style:italic;font-size:0.9375rem;">For the one who keeps starting over and is ready for something to finally take root.</span>
+      <span style="color:#BF8B19;padding:0 0.25rem;font-size:0.75rem;" aria-hidden="true">◆</span>
 
     </div>
   </div>
-
 </div>
+
+<script>
+(function () {
+  var track = document.getElementById('kpp-tb-track');
+  if (!track) return;
+  var pos = 0;
+  var speed = 0.6;
+  var paused = false;
+
+  function step() {
+    if (!paused) {
+      pos -= speed;
+      if (pos <= -(track.scrollWidth / 2)) pos = 0;
+      track.style.transform = 'translateX(' + pos + 'px)';
+    }
+    requestAnimationFrame(step);
+  }
+
+  var strip = track.parentElement;
+  strip.addEventListener('mouseenter', function () { paused = true; });
+  strip.addEventListener('mouseleave', function () { paused = false; });
+
+  requestAnimationFrame(step);
+})();
+</script>
 ```
 
-> **Why two sets of statements?** The marquee works by translating the strip exactly −50% of its total width, then resetting to 0 invisibly. Two identical sets make the reset undetectable — the end of set 2 looks exactly like the start of set 1.
+> **Why two sets of statements?** The JS resets position to `0` when the track has scrolled exactly half its total width. With two identical sets, the reset is invisible — the content repeats seamlessly.
 
-> **If Breakdance strips your `<div>` tags:** Rich Text elements use WordPress's content editor, which occasionally sanitises block-level HTML. If the markup collapses after saving, use a **Code Block** element instead of Rich Text — it preserves raw HTML exactly as written.
+> **Speed adjustment:** The `speed` variable (currently `0.6`) controls pixels moved per animation frame. Increase it to scroll faster, decrease for slower. A value between `0.4` and `1.0` covers most needs.
 
 ---
 
@@ -1113,11 +1102,10 @@ Replace `PASTE_YOUR_ROCKS_AND_RIVER_IMAGE_URL_HERE` with the WordPress media URL
 | Property | Value |
 |---|---|
 | Direction | Right → Left |
-| Duration | `40s` |
-| Timing | Linear (constant speed, no easing) |
+| Speed | `0.6px` per animation frame (~60fps = ~36px/s) |
 | Loop | Infinite |
-| Hover behaviour | Pauses on mouse-over |
-| Technique | CSS `@keyframes` targeting `.kpp-marquee` in Global CSS |
+| Hover behaviour | Pauses on mouse-over (JS `paused` flag) |
+| Technique | `requestAnimationFrame` loop — no CSS animations, no keyframes |
 
 ---
 
@@ -1127,6 +1115,6 @@ Replace `PASTE_YOUR_ROCKS_AND_RIVER_IMAGE_URL_HERE` with the WordPress media URL
 |---|---|
 | Border | `1px solid rgba(11, 35, 75, 0.10)` — top and bottom |
 | Background | `rgba(237, 236, 233, 0.85)` — Stone at 85% opacity |
-| Texture | Rocks & River image at `5.5%` opacity (inline style, absolute inside the HTML block) |
-| Padding | `20px` top and bottom |
+| Texture | Rocks & River image at `5.5%` opacity (absolute div, inline styled) |
+| Padding | `1.25rem` top and bottom |
 | Overflow | Hidden (cuts off text as it exits either edge) |
