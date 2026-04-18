@@ -10,31 +10,13 @@
 
 ## How the Nav Works
 
-The navbar is a **floating pill** fixed to the top of every page. On mobile, a hamburger button opens a full-screen overlay with large serif links.
-
-The nav is built in three places:
+The navbar is a **floating pill** fixed to the top of every page. Nav links come from a WordPress menu connected to Breakdance's native **Nav Menu** element, which handles desktop display and the mobile hamburger automatically. All styling is done via each element's own **Custom CSS** field using `%%SELECTOR%%` — no CSS classes required.
 
 | Where | What goes there |
 |---|---|
-| **Breakdance → Templates → Add Custom Template** | All nav elements — logo, links, CTA, hamburger button |
-| **Breakdance → Global Styles → Custom CSS** | All nav CSS classes |
-| **Breakdance → Settings → Footer Code** | Mobile overlay HTML + JavaScript only |
-
-> The mobile overlay needs to be in Footer Code because it covers the full page (`position: fixed; inset: 0`) and can't live inside the nav template itself.
-
----
-
-## How CSS Classes Work in Breakdance
-
-Every CSS rule in this guide uses a class selector (e.g. `.kpp-pill`, `.kpp-link`). Here is how you connect a class to an element:
-
-1. Select the element in the Breakdance canvas
-2. In the settings panel on the left, click the **Advanced** tab
-3. Find the **CSS Classes** field
-4. Type the class name **without the dot** — e.g. type `kpp-pill`, not `.kpp-pill`
-5. Press Enter or click away to apply
-
-Breakdance adds that class to the element's HTML. The browser then matches it to the CSS rule you pasted in Global Styles. Every step below tells you exactly which class to assign to each element.
+| **WordPress → Appearance → Menus** | Create the menu items |
+| **Breakdance → Templates → Add Custom Template** | Build the nav elements |
+| **Each element's Custom CSS field** | All styling via `%%SELECTOR%%` |
 
 ---
 
@@ -42,210 +24,57 @@ Breakdance adds that class to the element's HTML. The browser then matches it to
 
 ```
 Custom Template
-└── Section  ←  transparent wrapper (flex, centered, position fixed)
-    └── Div  ←  pill container     [class: kpp-pill]
+└── Section  ←  transparent, fixed, centered
+    └── Div  ←  navy pill container
         ├── Image  ←  logo (linked to homepage)
-        ├── Div  ←  desktop links wrapper     [class: kpp-links]
-        │   ├── Link  ←  "About"              [class: kpp-link]
-        │   ├── Link  ←  "Pathways"           [class: kpp-link]
-        │   ├── Link  ←  "Devotional"         [class: kpp-link]
-        │   └── Link  ←  "Storehouse"         [class: kpp-link]
-        ├── Button  ←  "Begin Here" CTA        [class: kpp-cta]
-        └── Button  ←  hamburger               [class: kpp-ham]
-            └── Div  ←  icon lines             [class: kpp-ham-icon]
+        ├── Nav Menu  ←  desktop links + mobile hamburger (native)
+        └── Button  ←  "Begin Here" CTA (hidden on mobile)
 ```
 
 ---
 
-## Step 0 — Create the Custom Template
+## Step 0A — Create Your WordPress Menu
+
+The Nav Menu element in Breakdance pulls its links from a WordPress menu. Set this up first.
+
+1. Go to **WordPress → Appearance → Menus**
+2. Click **Create a new menu**
+3. Name it `Main Nav`
+4. Under **Menu items**, add four **Custom Links**:
+
+| Label | URL |
+|---|---|
+| `About` | `#about` |
+| `Pathways` | `#pathways` |
+| `Devotional` | `#devotional` |
+| `Storehouse` | `#storehouse` |
+
+5. Click **Save Menu**
+
+---
+
+## Step 0B — Create the Custom Template
 
 1. Go to **Breakdance → Templates**
 2. Click **Add Template** → select **Add Custom Template**
 3. Name it `Main Navigation`
 4. Click **Edit with Breakdance** to open the canvas
+5. In the top bar, find **Display Conditions** and set it to **Entire Site**
 
-Once inside the canvas, look for **Display Conditions** or **Settings** in the top bar and set it to display on **Entire Site** (or **All Pages**) so it appears on every page.
-
-> Because the Section inside this template will be `position: fixed`, it will float above all page content regardless of where Breakdance injects the template markup. The display condition just ensures it loads on every page.
-
----
-
-## Before You Build — Add CSS to Global Styles
-
-Go to **Breakdance → Global Styles → Custom CSS** and paste this block. It must be in place before the elements will look correct.
-
-```css
-/* ── Nav pill ───────────────────────────── */
-.kpp-pill {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  background-color: rgba(11, 35, 75, 0.90);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border-radius: 9999px;
-  padding: 2px 12px 2px 16px;
-  border: 1px solid rgba(255, 255, 255, 0.10);
-  box-shadow: 0 8px 40px rgba(11, 35, 75, 0.30);
-  width: 100%;
-  max-width: 1280px;
-  box-sizing: border-box;
-}
-
-/* ── Desktop links wrapper ──────────────── */
-.kpp-links {
-  display: none;
-  align-items: center;
-  gap: 24px;
-  margin-left: auto;
-}
-
-@media (min-width: 768px) {
-  .kpp-links { display: flex; }
-}
-
-/* ── Individual nav link ────────────────── */
-.kpp-link {
-  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
-  font-weight: 300;
-  font-size: 0.775rem;
-  letter-spacing: 0.025em;
-  color: rgba(255, 255, 255, 0.72) !important;
-  text-decoration: none;
-  transition: color 0.3s ease;
-}
-
-.kpp-link:hover { color: #ffffff !important; }
-
-/* ── CTA button ─────────────────────────── */
-.kpp-cta {
-  display: none !important;
-  background-color: #BF8B19 !important;
-  color: #ffffff !important;
-  font-family: 'Plus Jakarta Sans', system-ui, sans-serif !important;
-  font-weight: 300 !important;
-  font-size: 0.75rem !important;
-  letter-spacing: 0.05em !important;
-  padding: 8px 20px !important;
-  border-radius: 9999px !important;
-  border: none !important;
-  white-space: nowrap;
-  transition: background-color 0.3s ease !important;
-}
-
-@media (min-width: 768px) {
-  .kpp-cta { display: inline-flex !important; }
-}
-
-.kpp-cta:hover { background-color: #a57816 !important; }
-
-/* ── Hamburger button ───────────────────── */
-.kpp-ham {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  align-items: center;
-  justify-content: center;
-  width: 36px !important;
-  height: 36px !important;
-  min-width: 36px;
-  border-radius: 9999px !important;
-  border: 1px solid rgba(255, 255, 255, 0.15) !important;
-  background: transparent !important;
-  cursor: pointer;
-  padding: 0 !important;
-  flex-shrink: 0;
-}
-
-@media (min-width: 768px) {
-  .kpp-ham { display: none !important; }
-}
-
-/* Draw the 3 hamburger lines using box-shadow on a single element */
-.kpp-ham-icon {
-  display: block;
-  width: 20px;
-  height: 1.5px;
-  background: #ffffff;
-  position: relative;
-  transition: background 0.35s ease,
-              transform 0.35s cubic-bezier(0.32, 0.72, 0, 1);
-}
-
-.kpp-ham-icon::before,
-.kpp-ham-icon::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  width: 20px;
-  height: 1.5px;
-  background: #ffffff;
-  transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1),
-              opacity 0.35s ease;
-}
-
-.kpp-ham-icon::before { top: -6.5px; }
-.kpp-ham-icon::after  { top:  6.5px; }
-
-/* ── Mobile overlay ─────────────────────── */
-#kpp-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 40;
-  background-color: rgba(11, 35, 75, 0.95);
-  backdrop-filter: blur(32px);
-  -webkit-backdrop-filter: blur(32px);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 28px;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.5s ease;
-}
-
-#kpp-overlay.open {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.kpp-overlay-link {
-  font-family: 'Oranienbaum', Georgia, serif;
-  font-size: clamp(2rem, 8vw, 3rem);
-  color: #ffffff;
-  text-decoration: none;
-  opacity: 0;
-  transform: translateY(1.5rem);
-  transition: opacity 0.5s cubic-bezier(0.32, 0.72, 0, 1),
-              transform 0.5s cubic-bezier(0.32, 0.72, 0, 1),
-              color 0.2s ease;
-}
-
-.kpp-overlay-link:hover { color: #BF8B19; }
-
-#kpp-overlay.open .kpp-overlay-link                 { opacity: 1; transform: translateY(0); }
-#kpp-overlay.open .kpp-overlay-link:nth-child(1)    { transition-delay: 0.06s; }
-#kpp-overlay.open .kpp-overlay-link:nth-child(2)    { transition-delay: 0.11s; }
-#kpp-overlay.open .kpp-overlay-link:nth-child(3)    { transition-delay: 0.16s; }
-#kpp-overlay.open .kpp-overlay-link:nth-child(4)    { transition-delay: 0.21s; }
-#kpp-overlay.open .kpp-overlay-link:nth-child(5)    { transition-delay: 0.26s; }
-```
+> Because the Section inside this template uses `position: fixed`, the nav floats above all page content regardless of where Breakdance injects the template markup. The display condition simply ensures it loads on every page.
 
 ---
 
 ## Step 1 — Section (Outer Wrapper)
 
-Breakdance creates a Section automatically when you open the canvas. Select it and configure:
+Breakdance adds a Section automatically when you open the canvas. Select it and configure:
 
 | Tab | Setting | Value |
 |---|---|---|
 | Background | Color | None / Transparent |
 | Spacing | Padding | `20px` top · `16px` left & right · `0` bottom |
 
-**Advanced tab → CSS Classes field:** leave blank — this element uses Custom CSS only.
-
-**Custom CSS:**
+**Custom CSS** (paste into the element's Custom CSS field):
 
 ```css
 %%SELECTOR%% {
@@ -260,17 +89,33 @@ Breakdance creates a Section automatically when you open the canvas. Select it a
 }
 ```
 
-> `position: fixed` is what makes the nav float above the page. Everything else positions it correctly at the top.
+> `position: fixed` is what makes the nav float above the page at all times.
 
 ---
 
 ## Step 2 — Div (Pill Container)
 
-Inside the Section, add a **Div**.
+Inside the Section, add a **Div** element.
 
-**Advanced tab → CSS Classes field:** type `kpp-pill`
+**Custom CSS:**
 
-The `.kpp-pill` rule in Global Styles applies the navy background, blur, rounded corners, border, and shadow. No Custom CSS needed on this element.
+```css
+%%SELECTOR%% {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background-color: rgba(11, 35, 75, 0.90);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-radius: 9999px;
+  padding: 2px 12px 2px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  box-shadow: 0 8px 40px rgba(11, 35, 75, 0.30);
+  width: 100%;
+  max-width: 1280px;
+  box-sizing: border-box;
+}
+```
 
 ---
 
@@ -285,8 +130,6 @@ Inside the pill Div, add an **Image** element.
 | Content | Link Target | Same tab |
 | Content | Alt Text | `Kingdom Para Para` |
 
-**Advanced tab → CSS Classes field:** leave blank — use Custom CSS below instead.
-
 **Custom CSS:**
 
 ```css
@@ -300,135 +143,104 @@ Inside the pill Div, add an **Image** element.
 
 ---
 
-## Step 4 — Div (Desktop Links Wrapper)
+## Step 4 — Nav Menu
 
-Inside the pill Div, after the Image, add a **Div**.
+Inside the pill Div, after the Image, add a **Nav Menu** element.
 
-**Advanced tab → CSS Classes field:** type `kpp-links`
+**In the Breakdance panel:**
 
-The `.kpp-links` rule hides this on mobile and shows it as a flex row on desktop. No Custom CSS needed.
-
----
-
-## Steps 5–8 — Link Elements (Desktop Nav Links)
-
-Inside the Desktop Links Div (Step 4), add four **Link** elements — one per nav item.
-
-For **each** Link element:
-- **Content tab → Text:** set the link label
-- **Content tab → Link / URL:** set the anchor target
-- **Advanced tab → CSS Classes field:** type `kpp-link`
-
-| Step | Label | URL |
+| Tab | Setting | Value |
 |---|---|---|
-| 5 | `About` | `#about` |
-| 6 | `Pathways` | `#pathways` |
-| 7 | `Devotional` | `#devotional` |
-| 8 | `Storehouse` | `#storehouse` |
+| Content | Menu | Select `Main Nav` |
+| Layout | Mobile Breakpoint | `768px` |
 
-The `.kpp-link` rule in Global Styles handles all typography and hover colour. No Custom CSS needed on any of these.
+**Custom CSS:**
+
+```css
+/* Fill the remaining space and push links to the right */
+%%SELECTOR%% {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+/* Desktop link styling */
+%%SELECTOR%% a {
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-weight: 300;
+  font-size: 0.775rem;
+  letter-spacing: 0.025em;
+  color: rgba(255, 255, 255, 0.72);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+%%SELECTOR%% a:hover {
+  color: #ffffff;
+}
+
+/* Mobile menu panel */
+%%SELECTOR%% .bde-nav-menu__mobile-menu {
+  background-color: rgba(11, 35, 75, 0.97);
+  padding: 40px 24px;
+}
+
+%%SELECTOR%% .bde-nav-menu__mobile-menu a {
+  font-family: 'Oranienbaum', Georgia, serif;
+  font-size: clamp(1.5rem, 6vw, 2.5rem);
+  color: #ffffff;
+}
+
+%%SELECTOR%% .bde-nav-menu__mobile-menu a:hover {
+  color: #BF8B19;
+}
+```
+
+> **Important:** The class names for the mobile menu panel (e.g. `.bde-nav-menu__mobile-menu`) are Breakdance's internal names and may differ on your install. After building, right-click the mobile menu on your live page → **Inspect** to find the exact class names Breakdance generates, then update those selectors here to match.
 
 ---
 
-## Step 9 — Button (CTA)
+## Step 5 — Button (CTA, desktop only)
 
-Inside the pill Div, after the Links Div (Step 4), add a **Button**.
+Inside the pill Div, after the Nav Menu, add a **Button** element.
 
 | Tab | Setting | Value |
 |---|---|---|
 | Content | Label | `Begin Here` |
 | Content | Link | `#pathways` |
 
-**Advanced tab → CSS Classes field:** type `kpp-cta`
-
-The `.kpp-cta` rule uses `!important` on every property to override Breakdance's default button styles. You do not need to change any typography or colour settings in the panel — the Global CSS handles everything.
-
----
-
-## Step 10 — Button (Hamburger, mobile only)
-
-Inside the pill Div, as the last element, add another **Button**.
-
-| Tab | Setting | Value |
-|---|---|---|
-| Content | Label | *(leave empty — no text)* |
-| Accessibility | ARIA Label | `Toggle navigation` |
-
-**Advanced tab → CSS Classes field:** type `kpp-ham`
-
 **Custom CSS:**
 
 ```css
 %%SELECTOR%% {
-  position: relative;
+  display: none;
+  align-items: center;
+  background-color: #BF8B19;
+  color: #ffffff;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-weight: 300;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  padding: 8px 20px;
+  border-radius: 9999px;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+  text-decoration: none;
+  flex-shrink: 0;
+  transition: background-color 0.3s ease;
 }
-```
 
-**Then add a Div inside this Button:**
-- Leave the Div empty — no content
-- **Advanced tab → CSS Classes field:** type `kpp-ham-icon`
+%%SELECTOR%%:hover {
+  background-color: #a57816;
+}
 
-The `.kpp-ham-icon` rule in Global Styles draws three white lines using the element itself plus `::before` and `::after` pseudo-elements. No additional settings needed.
-
----
-
-## Mobile Overlay — Footer Code
-
-The full-screen mobile overlay cannot live inside the Custom Template because it needs to cover the entire page. Go to **Breakdance → Settings → Custom Code → Footer Code** and paste this block. The overlay HTML and JavaScript are self-contained — they connect to the hamburger button via the `.kpp-ham` class, which the browser finds automatically.
-
-```html
-<div id="kpp-overlay" aria-hidden="true">
-  <a href="#about"      class="kpp-overlay-link">About</a>
-  <a href="#pathways"   class="kpp-overlay-link">Pathways</a>
-  <a href="#devotional" class="kpp-overlay-link">Devotional</a>
-  <a href="#storehouse" class="kpp-overlay-link">Storehouse</a>
-  <a href="#pathways"   class="kpp-overlay-link">Begin Here</a>
-</div>
-
-<script>
-(function () {
-  const overlay  = document.getElementById('kpp-overlay');
-  const hamBtn   = document.querySelector('.kpp-ham');
-  const hamIcon  = document.querySelector('.kpp-ham-icon');
-  let   isOpen   = false;
-
-  function openNav() {
-    isOpen = true;
-    if (hamIcon) {
-      hamIcon.style.background      = 'transparent';
-      hamIcon.style.transform       = '';
-    }
-    if (hamBtn) hamBtn.setAttribute('aria-expanded', 'true');
-    overlay.classList.add('open');
-    overlay.setAttribute('aria-hidden', 'false');
-    document.body.style.overflow = 'hidden';
+@media (min-width: 768px) {
+  %%SELECTOR%% {
+    display: inline-flex;
   }
-
-  function closeNav() {
-    isOpen = false;
-    if (hamIcon) {
-      hamIcon.style.background = '#ffffff';
-      hamIcon.style.transform  = '';
-    }
-    if (hamBtn) hamBtn.setAttribute('aria-expanded', 'false');
-    overlay.classList.remove('open');
-    overlay.setAttribute('aria-hidden', 'true');
-    document.body.style.overflow = '';
-  }
-
-  if (hamBtn) hamBtn.addEventListener('click', function () {
-    isOpen ? closeNav() : openNav();
-  });
-
-  overlay.querySelectorAll('.kpp-overlay-link').forEach(function (link) {
-    link.addEventListener('click', closeNav);
-  });
-
-  document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape' && isOpen) closeNav();
-  });
-})();
-</script>
+}
 ```
 
 ---
@@ -445,9 +257,9 @@ The full-screen mobile overlay cannot live inside the Custom Template because it
 | Logo height | `64px` |
 | Link font | Plus Jakarta Sans Light 300 / 12.4px |
 | Link colour | White 72% → White 100% on hover |
-| CTA | `#BF8B19` Yellow Gold pill → `#a57816` on hover |
-| Mobile | Hamburger → full-screen Navy overlay |
-| Overlay links | Oranienbaum, fluid `2rem–3rem`, stagger fade-up |
+| CTA | `#BF8B19` Yellow Gold → `#a57816` on hover |
+| Mobile | Nav Menu native hamburger → styled panel |
+| Mobile link font | Oranienbaum, fluid `1.5rem–2.5rem` |
 
 ---
 
