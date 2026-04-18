@@ -4,56 +4,71 @@
 ---
 
 # Navigation Bar
-*Built entirely via Breakdance → Settings → Header Code + Footer Code*
+*Built in Breakdance → Templates → Header Template*
 
 ---
 
 ## How the Nav Works
 
-The navbar is a **floating pill** fixed to the top of every page. It starts hidden and slides down once the user scrolls past the hero intro. On mobile, a hamburger button opens a full-screen overlay with large serif links.
+The navbar is a **floating pill** fixed to the top of every page. It starts hidden and slides down once the user scrolls past the hero. On mobile, a hamburger button opens a full-screen overlay with large serif links.
 
-Because Breakdance's Code Block is Pro-only, the nav is injected using the two built-in code fields found at **Breakdance → Settings → Custom Code**:
+The nav is built in three places:
 
-| Field | What goes there |
+| Where | What goes there |
 |---|---|
-| **Header Code** | A `<style>` block — all navbar CSS |
-| **Footer Code** | The nav HTML + a `<script>` block — markup and JavaScript |
+| **Breakdance → Templates → Header** | All nav elements — logo, links, CTA, hamburger button |
+| **Global Styles → Custom CSS** | All nav CSS |
+| **Footer Code** | The mobile overlay HTML + toggle JavaScript only |
 
-Since the nav is `position: fixed`, it doesn't matter that the HTML is injected near `</body>`. It floats above everything regardless.
+> The mobile overlay (`position: fixed; inset: 0`) needs to sit outside the header template because it covers the full page. The Footer Code field is the right place for it — the overlay HTML and its script are self-contained and don't affect the header structure.
 
 ---
 
-## Step 1 — Paste into Header Code
+## Element Structure Overview
 
-Go to **Breakdance → Settings → Custom Code → Header Code**. Paste this entire block.
+```
+Header Template
+└── Section  ←  transparent wrapper (flex, centered)
+    └── Div  ←  pill container (navy, blur, flex, rounded-full)
+        ├── Image  ←  logo (linked to homepage)
+        ├── Div  ←  desktop links wrapper (hidden on mobile)
+        │   ├── Link  ←  "About"
+        │   ├── Link  ←  "Pathways"
+        │   ├── Link  ←  "Devotional"
+        │   └── Link  ←  "Storehouse"
+        ├── Button  ←  "Begin Here" CTA (hidden on mobile)
+        └── Button  ←  hamburger (visible mobile only)
+```
 
-```html
-<style>
-/* ── Nav wrapper — fixed floating pill ── */
-#kpp-nav {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 50;
-  display: flex;
-  justify-content: center;
-  padding: 20px 16px 0;
-  opacity: 0;
-  pointer-events: none;
-  transform: translateY(-100%);
-  transition: opacity 0.55s cubic-bezier(0.32, 0.72, 0, 1),
-              transform 0.55s cubic-bezier(0.32, 0.72, 0, 1);
-}
+---
 
-#kpp-nav.nav-visible {
-  opacity: 1;
-  pointer-events: auto;
-  transform: translateY(0);
-}
+## Before You Build — Create the Header Template
 
-/* ── Pill inner ─────────────────────────── */
-.kpp-nav-pill {
+1. Go to **Breakdance → Templates**
+2. Click **Add New**
+3. Name it `Main Navigation`
+4. Set **Template Type** to **Header**
+5. Click **Edit with Breakdance**
+6. In the template settings, set:
+   - **Position:** Fixed
+   - **Sticky:** Off *(fixed handles this)*
+   - **Background:** None / Transparent
+7. Save the template
+
+Then assign it globally:
+1. Go to **Breakdance → Settings → Global**
+2. Under **Global Header**, select `Main Navigation`
+3. Save
+
+---
+
+## Before You Build — Add CSS to Global Styles
+
+Go to **Breakdance → Global Styles → Custom CSS** and paste this block. It must be in place before the elements will look correct.
+
+```css
+/* ── Nav pill ───────────────────────────── */
+.kpp-pill {
   display: flex;
   align-items: center;
   gap: 20px;
@@ -64,93 +79,108 @@ Go to **Breakdance → Settings → Custom Code → Header Code**. Paste this en
   padding: 2px 12px 2px 16px;
   border: 1px solid rgba(255, 255, 255, 0.10);
   box-shadow: 0 8px 40px rgba(11, 35, 75, 0.30);
+  width: 100%;
+  max-width: 1280px;
+  box-sizing: border-box;
 }
 
-/* ── Logo ───────────────────────────────── */
-.kpp-nav-logo img {
-  height: 64px;
-  width: auto;
-  display: block;
-}
-
-/* ── Desktop links ──────────────────────── */
-.kpp-nav-links {
+/* ── Desktop links wrapper ──────────────── */
+.kpp-links {
   display: none;
   align-items: center;
   gap: 24px;
+  margin-left: auto;
 }
 
 @media (min-width: 768px) {
-  .kpp-nav-links { display: flex; }
+  .kpp-links { display: flex; }
 }
 
-.kpp-nav-link {
+/* ── Individual nav link ────────────────── */
+.kpp-link {
   font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
   font-weight: 300;
   font-size: 0.775rem;
   letter-spacing: 0.025em;
-  color: rgba(255, 255, 255, 0.72);
+  color: rgba(255, 255, 255, 0.72) !important;
   text-decoration: none;
   transition: color 0.3s ease;
 }
 
-.kpp-nav-link:hover { color: #ffffff; }
+.kpp-link:hover { color: #ffffff !important; }
 
 /* ── CTA button ─────────────────────────── */
-.kpp-nav-cta {
-  display: none;
-  align-items: center;
-  background-color: #BF8B19;
-  color: #ffffff;
-  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
-  font-weight: 300;
-  font-size: 0.75rem;
-  letter-spacing: 0.05em;
-  padding: 8px 20px;
-  border-radius: 9999px;
-  text-decoration: none;
-  transition: background-color 0.3s ease;
+.kpp-cta {
+  display: none !important;
+  background-color: #BF8B19 !important;
+  color: #ffffff !important;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif !important;
+  font-weight: 300 !important;
+  font-size: 0.75rem !important;
+  letter-spacing: 0.05em !important;
+  padding: 8px 20px !important;
+  border-radius: 9999px !important;
+  border: none !important;
   white-space: nowrap;
+  transition: background-color 0.3s ease !important;
 }
 
 @media (min-width: 768px) {
-  .kpp-nav-cta { display: inline-flex; }
+  .kpp-cta { display: inline-flex !important; }
 }
 
-.kpp-nav-cta:hover { background-color: #a57816; }
+.kpp-cta:hover { background-color: #a57816 !important; }
 
 /* ── Hamburger button ───────────────────── */
-.kpp-nav-toggle {
+.kpp-ham {
   display: flex;
   flex-direction: column;
   gap: 5px;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
-  border-radius: 9999px;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  background: transparent;
+  width: 36px !important;
+  height: 36px !important;
+  min-width: 36px;
+  border-radius: 9999px !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  background: transparent !important;
   cursor: pointer;
-  padding: 0;
+  padding: 0 !important;
   flex-shrink: 0;
 }
 
 @media (min-width: 768px) {
-  .kpp-nav-toggle { display: none; }
+  .kpp-ham { display: none !important; }
 }
 
-.kpp-ham-line {
+/* Draw the 3 hamburger lines using box-shadow on a single element */
+.kpp-ham-icon {
   display: block;
   width: 20px;
   height: 1.5px;
   background: #ffffff;
-  transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1),
-              opacity 0.35s cubic-bezier(0.32, 0.72, 0, 1);
+  position: relative;
+  transition: background 0.35s ease,
+              transform 0.35s cubic-bezier(0.32, 0.72, 0, 1);
 }
 
-/* ── Mobile full-screen overlay ─────────── */
-#kpp-nav-overlay {
+.kpp-ham-icon::before,
+.kpp-ham-icon::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  width: 20px;
+  height: 1.5px;
+  background: #ffffff;
+  transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1),
+              opacity 0.35s ease;
+}
+
+.kpp-ham-icon::before { top: -6.5px; }
+.kpp-ham-icon::after  { top:  6.5px; }
+
+/* ── Mobile overlay ─────────────────────── */
+#kpp-overlay {
   position: fixed;
   inset: 0;
   z-index: 40;
@@ -167,7 +197,7 @@ Go to **Breakdance → Settings → Custom Code → Header Code**. Paste this en
   transition: opacity 0.5s ease;
 }
 
-#kpp-nav-overlay.open {
+#kpp-overlay.open {
   opacity: 1;
   pointer-events: auto;
 }
@@ -186,113 +216,185 @@ Go to **Breakdance → Settings → Custom Code → Header Code**. Paste this en
 
 .kpp-overlay-link:hover { color: #BF8B19; }
 
-#kpp-nav-overlay.open .kpp-overlay-link                    { opacity: 1; transform: translateY(0); }
-#kpp-nav-overlay.open .kpp-overlay-link:nth-child(1)       { transition-delay: 0.06s; }
-#kpp-nav-overlay.open .kpp-overlay-link:nth-child(2)       { transition-delay: 0.11s; }
-#kpp-nav-overlay.open .kpp-overlay-link:nth-child(3)       { transition-delay: 0.16s; }
-#kpp-nav-overlay.open .kpp-overlay-link:nth-child(4)       { transition-delay: 0.21s; }
-#kpp-nav-overlay.open .kpp-overlay-link:nth-child(5)       { transition-delay: 0.26s; }
-</style>
+#kpp-overlay.open .kpp-overlay-link                 { opacity: 1; transform: translateY(0); }
+#kpp-overlay.open .kpp-overlay-link:nth-child(1)    { transition-delay: 0.06s; }
+#kpp-overlay.open .kpp-overlay-link:nth-child(2)    { transition-delay: 0.11s; }
+#kpp-overlay.open .kpp-overlay-link:nth-child(3)    { transition-delay: 0.16s; }
+#kpp-overlay.open .kpp-overlay-link:nth-child(4)    { transition-delay: 0.21s; }
+#kpp-overlay.open .kpp-overlay-link:nth-child(5)    { transition-delay: 0.26s; }
 ```
 
 ---
 
-## Step 2 — Paste into Footer Code
+## Step 1 — Section (Outer Wrapper)
 
-Go to **Breakdance → Settings → Custom Code → Footer Code**. Paste this entire block.
+Breakdance creates a Section automatically when you open the Header Template. Select it and configure:
 
-> **Before pasting:** Replace `PASTE_YOUR_LOGO_URL_HERE` with the WordPress media URL for the **Kingdom Para Para Logo Transparent** file after uploading it to your Media Library.
+| Tab | Setting | Value |
+|---|---|---|
+| Background | Color | None / Transparent |
+| Spacing | Padding | `20px` top · `16px` left & right · `0` bottom |
+
+**Custom CSS:**
+
+```css
+%%SELECTOR%% {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+}
+```
+
+---
+
+## Step 2 — Div (Pill Container)
+
+Inside the Section, add a **Div**. Assign it the CSS class `kpp-pill` using Breakdance's **CSS Classes** field.
+
+No additional Custom CSS needed — the `.kpp-pill` class from Global Styles handles everything.
+
+---
+
+## Step 3 — Image (Logo)
+
+Inside the pill Div, add an **Image** element.
+
+| Tab | Setting | Value |
+|---|---|---|
+| Content | Image | Upload **Kingdom Para Para Logo Transparent** |
+| Content | Link URL | `/` |
+| Content | Link Target | Same tab |
+| Content | Alt Text | `Kingdom Para Para` |
+
+**Custom CSS:**
+
+```css
+%%SELECTOR%% {
+  height: 64px;
+  width: auto;
+  display: block;
+  flex-shrink: 0;
+}
+```
+
+---
+
+## Step 4 — Div (Desktop Links Wrapper)
+
+Inside the pill Div, after the Image, add a **Div**. Assign CSS class `kpp-links`.
+
+No additional Custom CSS needed.
+
+---
+
+## Steps 5–8 — Link Elements (Desktop Nav Links)
+
+Inside the Desktop Links Div, add four **Link** elements. Assign CSS class `kpp-link` to each.
+
+| Step | Link text | Link target |
+|---|---|---|
+| 5 | `About` | `#about` |
+| 6 | `Pathways` | `#pathways` |
+| 7 | `Devotional` | `#devotional` |
+| 8 | `Storehouse` | `#storehouse` |
+
+No additional Custom CSS needed — `.kpp-link` in Global Styles handles all styling.
+
+---
+
+## Step 9 — Button (CTA)
+
+Inside the pill Div, after the Links Div, add a **Button**. Assign CSS class `kpp-cta`.
+
+| Tab | Setting | Value |
+|---|---|---|
+| Content | Label | `Begin Here` |
+| Content | Link | `#pathways` |
+
+Remove any default Breakdance button styles — the `.kpp-cta` class overrides everything with `!important`.
+
+---
+
+## Step 10 — Button (Hamburger, mobile only)
+
+Inside the pill Div, as the last element, add another **Button**. Assign CSS class `kpp-ham`.
+
+| Tab | Setting | Value |
+|---|---|---|
+| Content | Label | *(leave empty)* |
+| Accessibility | ARIA Label | `Toggle navigation` |
+
+**Custom CSS:**
+
+```css
+%%SELECTOR%% {
+  position: relative;
+}
+```
+
+Then inside this Button, add a **Div** and assign it CSS class `kpp-ham-icon`. Leave it empty — the three hamburger lines are drawn using `::before`, `::after`, and the element itself via the Global CSS you already added.
+
+---
+
+## Mobile Overlay — Footer Code
+
+The full-screen mobile overlay sits outside the header template because it covers the entire page (`position: fixed; inset: 0`). Go to **Breakdance → Settings → Custom Code → Footer Code** and paste this:
 
 ```html
-<!-- ── Kingdom Para Para — Navigation ── -->
-<nav id="kpp-nav" aria-label="Main navigation">
-  <div class="kpp-nav-pill">
-
-    <!-- Logo -->
-    <a href="#" class="kpp-nav-logo" aria-label="Kingdom Para Para — home">
-      <img src="PASTE_YOUR_LOGO_URL_HERE" alt="Kingdom Para Para" width="auto" height="64">
-    </a>
-
-    <!-- Desktop links -->
-    <div class="kpp-nav-links">
-      <a href="#about"      class="kpp-nav-link">About</a>
-      <a href="#pathways"   class="kpp-nav-link">Pathways</a>
-      <a href="#devotional" class="kpp-nav-link">Devotional</a>
-      <a href="#storehouse" class="kpp-nav-link">Storehouse</a>
-    </div>
-
-    <!-- Desktop CTA -->
-    <a href="#pathways" class="kpp-nav-cta">Begin Here</a>
-
-    <!-- Hamburger (mobile only) -->
-    <button class="kpp-nav-toggle" id="kpp-nav-toggle"
-            aria-label="Toggle navigation" aria-expanded="false" aria-controls="kpp-nav-overlay">
-      <span class="kpp-ham-line" id="kpp-ham1"></span>
-      <span class="kpp-ham-line" id="kpp-ham2"></span>
-      <span class="kpp-ham-line" id="kpp-ham3"></span>
-    </button>
-
-  </div>
-</nav>
-
-<!-- Mobile overlay -->
-<div id="kpp-nav-overlay" aria-hidden="true">
-  <a href="#about"      class="kpp-overlay-link" onclick="kppCloseNav()">About</a>
-  <a href="#pathways"   class="kpp-overlay-link" onclick="kppCloseNav()">Pathways</a>
-  <a href="#devotional" class="kpp-overlay-link" onclick="kppCloseNav()">Devotional</a>
-  <a href="#storehouse" class="kpp-overlay-link" onclick="kppCloseNav()">Storehouse</a>
-  <a href="#pathways"   class="kpp-overlay-link" onclick="kppCloseNav()">Begin Here</a>
+<div id="kpp-overlay" aria-hidden="true">
+  <a href="#about"      class="kpp-overlay-link">About</a>
+  <a href="#pathways"   class="kpp-overlay-link">Pathways</a>
+  <a href="#devotional" class="kpp-overlay-link">Devotional</a>
+  <a href="#storehouse" class="kpp-overlay-link">Storehouse</a>
+  <a href="#pathways"   class="kpp-overlay-link">Begin Here</a>
 </div>
 
 <script>
 (function () {
-  const nav     = document.getElementById('kpp-nav');
-  const overlay = document.getElementById('kpp-nav-overlay');
-  const toggle  = document.getElementById('kpp-nav-toggle');
-  const ham1    = document.getElementById('kpp-ham1');
-  const ham2    = document.getElementById('kpp-ham2');
-  const ham3    = document.getElementById('kpp-ham3');
-  let   isOpen  = false;
+  const overlay  = document.getElementById('kpp-overlay');
+  const hamBtn   = document.querySelector('.kpp-ham');
+  const hamIcon  = document.querySelector('.kpp-ham-icon');
+  let   isOpen   = false;
 
-  /* ── Show nav after 80px scroll ── */
-  window.addEventListener('scroll', function () {
-    if (window.scrollY > 80) {
-      nav.classList.add('nav-visible');
-    } else {
-      nav.classList.remove('nav-visible');
-    }
-  }, { passive: true });
-
-  /* ── Open mobile overlay ── */
-  function kppOpenNav() {
+  function openNav() {
     isOpen = true;
-    ham1.style.transform = 'translateY(6.5px) rotate(45deg)';
-    ham2.style.opacity   = '0';
-    ham3.style.transform = 'translateY(-6.5px) rotate(-45deg)';
+    if (hamIcon) {
+      hamIcon.style.background      = 'transparent';
+      hamIcon.style.transform       = '';
+    }
+    if (hamBtn) hamBtn.setAttribute('aria-expanded', 'true');
     overlay.classList.add('open');
     overlay.setAttribute('aria-hidden', 'false');
-    toggle.setAttribute('aria-expanded', 'true');
     document.body.style.overflow = 'hidden';
   }
 
-  /* ── Close mobile overlay ── */
-  window.kppCloseNav = function () {
+  function closeNav() {
     isOpen = false;
-    ham1.style.transform = '';
-    ham2.style.opacity   = '';
-    ham3.style.transform = '';
+    if (hamIcon) {
+      hamIcon.style.background = '#ffffff';
+      hamIcon.style.transform  = '';
+    }
+    if (hamBtn) hamBtn.setAttribute('aria-expanded', 'false');
     overlay.classList.remove('open');
     overlay.setAttribute('aria-hidden', 'true');
-    toggle.setAttribute('aria-expanded', 'false');
     document.body.style.overflow = '';
-  };
+  }
 
-  toggle.addEventListener('click', function () {
-    isOpen ? window.kppCloseNav() : kppOpenNav();
+  if (hamBtn) hamBtn.addEventListener('click', function () {
+    isOpen ? closeNav() : openNav();
+  });
+
+  overlay.querySelectorAll('.kpp-overlay-link').forEach(function (link) {
+    link.addEventListener('click', closeNav);
   });
 
   document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape' && isOpen) window.kppCloseNav();
+    if (e.key === 'Escape' && isOpen) closeNav();
   });
 })();
 </script>
@@ -305,18 +407,16 @@ Go to **Breakdance → Settings → Custom Code → Footer Code**. Paste this en
 | Property | Value |
 |---|---|
 | Nav style | Floating pill — centered, fixed |
-| Background | `rgba(11, 35, 75, 0.90)` — Navy at 90% opacity |
+| Background | `rgba(11, 35, 75, 0.90)` — Navy at 90% |
 | Blur | `backdrop-filter: blur(24px)` |
 | Border | `1px solid rgba(255, 255, 255, 0.10)` |
 | Shadow | `0 8px 40px rgba(11, 35, 75, 0.30)` |
 | Logo height | `64px` |
 | Link font | Plus Jakarta Sans Light 300 / 12.4px |
-| Link colour | White at 72% opacity → 100% on hover |
-| CTA font | Plus Jakarta Sans Light 300 / 12px |
-| CTA background | `#BF8B19` Yellow Gold → `#a57816` on hover |
-| Scroll trigger | Appears after `80px` of scroll |
-| Mobile trigger | Hamburger opens full-screen Navy overlay |
-| Overlay links | Oranienbaum, fluid `2rem–3rem`, staggered fade-up |
+| Link colour | White 72% → White 100% on hover |
+| CTA | `#BF8B19` Yellow Gold pill → `#a57816` on hover |
+| Mobile | Hamburger → full-screen Navy overlay |
+| Overlay links | Oranienbaum, fluid `2rem–3rem`, stagger fade-up |
 
 ---
 
