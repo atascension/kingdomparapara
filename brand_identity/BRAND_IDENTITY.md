@@ -131,6 +131,60 @@ As Kingdom Para Para evolves, these foundations will continue to guide the visua
 
 ---
 
+## Breakdance Global Styles Guide
+
+This section maps the Kingdom Para Para brand palette and typography into Breakdance Builder's Global Styles panel.
+
+---
+
+### Colour Palette — Breakdance Mapping
+
+Each Breakdance colour slot accepts two values: a **Primary** swatch and a **Secondary** swatch (used for hover states, accents, or contrast variants).
+
+| Breakdance Slot | Primary | Secondary | Reasoning |
+|-----------------|---------|-----------|-----------|
+| **Brand** | `#0B234B` Navy | `#BF8B19` Yellow Gold | The core identity pairing — deep authority with a rich accent |
+| **Text** | `#0B234B` Navy | `#A47562` Muted Terracotta | Navy for primary body copy; terracotta for captions, labels, or decorative text |
+| **Headings** | `#0B234B` Navy | `#BF8B19` Yellow Gold | Navy as default heading colour; gold for highlighted or accent headings |
+| **Links** | `#BF8B19` Yellow Gold | `#0B234B` Navy | Gold draws the eye to links; navy on hover provides contrast and depth |
+| **Background** | `#EDECE9` Stone | `#C1DAE1` Muted Aqua | Stone as the default page background; aqua for section alternates or card fills |
+
+> **Note on dark sections:** When placing content on a Navy (`#0B234B`) background, switch to the White mono logo variant and use Stone (`#EDECE9`) or White for text.
+
+---
+
+### Typography — Breakdance Mapping
+
+| Breakdance Role | Typeface | Weight / Style | Notes |
+|-----------------|----------|----------------|-------|
+| **H1 / H2 Headings** | Oranienbaum | Regular | High-contrast serif — commands attention. Import via Google Fonts. |
+| **H3 / H4 Subheadings** | Newsreader | Light (300) | Elegant transitional serif — use at larger sizes (28pt+). Import via Google Fonts. |
+| **Body / Paragraph** | Plus Jakarta Sans | Light (300) | Clean, modern sans-serif — easy to read at all sizes. Import via Google Fonts. |
+| **Buttons / Labels** | Plus Jakarta Sans | Regular (400) | Slightly heavier weight for interactive elements to aid legibility. |
+| **Captions / Fine Print** | Plus Jakarta Sans | Light (300) | Consistent with body; reduce size to 12–13px. |
+
+#### Google Fonts Import
+
+Add the following to your Breakdance Global Styles → Custom CSS or the `<head>` of your site:
+
+```css
+@import url('https://fonts.googleapis.com/css2?family=Oranienbaum&family=Newsreader:wght@300&family=Plus+Jakarta+Sans:wght@300;400&display=swap');
+```
+
+---
+
+### Quick Reference — All Brand Colours
+
+| Name | HEX | Use In Breakdance |
+|------|-----|-------------------|
+| Navy | `#0B234B` | Brand Primary, Text Primary, Headings Primary, Links Secondary |
+| Muted Aqua | `#C1DAE1` | Background Secondary, section dividers, card fills |
+| Muted Terracotta | `#A47562` | Text Secondary, decorative accents, icon fills |
+| Yellow Gold | `#BF8B19` | Brand Secondary, Headings Secondary, Links Primary, CTA buttons |
+| Stone | `#EDECE9` | Background Primary, light section backgrounds |
+
+---
+
 ## Brand Designer Contact
 
 This brand identity was thoughtfully created by Marie Enro, 2025.
