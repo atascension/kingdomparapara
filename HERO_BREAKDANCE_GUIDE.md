@@ -688,3 +688,250 @@ If you prefer to paste all hero CSS into a single location (e.g. **Global Styles
 | Right Column | Column | `hero-img-col` |
 | 11 | Accent Thumb Div | `hero-accent` |
 | 12 | Accent Core Div | `hero-accent-core` |
+
+---
+
+---
+
+# Section 02 — Trust Bar (Marquee Slider)
+*Kingdom Para Para · Free elements only · No Pro required*
+
+---
+
+## What This Section Does
+
+A full-width band that sits immediately below the Hero, separated by a subtle top and bottom border. Three italic trust statements scroll continuously from right to left in a seamless loop, separated by gold diamond dividers. Hovering pauses the animation. The section has a photographic texture layered behind a semi-transparent parchment background, giving it depth without competing with the text.
+
+---
+
+## Element Structure Overview
+
+```
+1. Div  ←  outer wrapper (border top/bottom, overflow hidden)
+├── 2. Div  ←  texture layer (absolute, Rocks & River image)
+└── 3. Code Block  ←  marquee strip (parchment bg + scrolling text)
+```
+
+> **Why a Code Block?** Breakdance's free tier has no native ticker or marquee element. A Code Block lets you output the exact HTML structure and inline styles the animation needs without any third-party plugins.
+
+---
+
+## Global CSS — Add This First
+
+Before building the elements, add the marquee animation to **Breakdance → Global Styles → Custom CSS**. This only needs to be done once for the whole site.
+
+```css
+/* ── Trust Bar Marquee ─────────────────── */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+.marquee-inner {
+  display: flex;
+  align-items: center;
+  width: max-content;
+  animation: marquee 40s linear infinite;
+}
+
+.marquee-inner:hover {
+  animation-play-state: paused;
+}
+```
+
+---
+
+## Step 1 — Div (Outer Wrapper)
+
+Add a **Div** element directly after your Hero Section. This is the outermost container — it handles the top/bottom border and clips the scrolling content.
+
+**In the Breakdance panel:**
+
+| Tab | Setting | Value |
+|---|---|---|
+| Layout | Display | `Block` |
+| Layout | Overflow | `Hidden` |
+
+**Custom CSS:**
+
+```css
+%%SELECTOR%% {
+  position: relative;
+  overflow: hidden;
+  border-top: 1px solid rgba(11, 35, 75, 0.10);
+  border-bottom: 1px solid rgba(11, 35, 75, 0.10);
+}
+```
+
+---
+
+## Step 2 — Div (Texture Layer)
+
+Inside the outer wrapper, add a **Div** element. This is the photographic texture that sits behind the scrolling text at very low opacity.
+
+**In the Breakdance panel:**
+
+| Tab | Setting | Value |
+|---|---|---|
+| Content | Image | Upload **Rocks & River** |
+| Background | Image Size | Cover |
+| Background | Image Position | Center |
+
+**Custom CSS:**
+
+```css
+%%SELECTOR%% {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-image: url('PASTE_YOUR_ROCKS_AND_RIVER_IMAGE_URL_HERE');
+  background-size: cover;
+  background-position: center;
+  opacity: 0.055;
+  pointer-events: none;
+}
+```
+
+> Replace `PASTE_YOUR_ROCKS_AND_RIVER_IMAGE_URL_HERE` with the WordPress media URL for **Rocks & River** after uploading it.
+
+---
+
+## Step 3 — Code Block (Marquee Strip)
+
+Inside the outer wrapper (sibling of the texture Div, **after** it), add a **Code Block** element. Switch the Code Block to **HTML** mode and paste the following exactly.
+
+```html
+<div style="position:relative;overflow:hidden;background-color:rgba(237,236,233,0.85);padding-top:1.25rem;padding-bottom:1.25rem;">
+  <div class="marquee-inner" aria-label="Trust statements">
+
+    <!-- ── Set 1 ───────────────────────────────── -->
+    <span style="white-space:nowrap;padding-left:3rem;padding-right:3rem;color:rgba(11,35,75,0.65);font-family:'Newsreader',serif;font-weight:300;font-style:italic;font-size:0.9375rem;">
+      For the one who loves God and still feels stuck.
+    </span>
+    <span style="color:#BF8B19;padding-left:0.25rem;padding-right:0.25rem;font-size:0.75rem;" aria-hidden="true">◆</span>
+
+    <span style="white-space:nowrap;padding-left:3rem;padding-right:3rem;color:rgba(11,35,75,0.65);font-family:'Newsreader',serif;font-weight:300;font-style:italic;font-size:0.9375rem;">
+      For the believer whose faith and everyday life do not yet feel connected.
+    </span>
+    <span style="color:#BF8B19;padding-left:0.25rem;padding-right:0.25rem;font-size:0.75rem;" aria-hidden="true">◆</span>
+
+    <span style="white-space:nowrap;padding-left:3rem;padding-right:3rem;color:rgba(11,35,75,0.65);font-family:'Newsreader',serif;font-weight:300;font-style:italic;font-size:0.9375rem;">
+      For the one who keeps starting over and is ready for something to finally take root.
+    </span>
+    <span style="color:#BF8B19;padding-left:0.25rem;padding-right:0.25rem;font-size:0.75rem;" aria-hidden="true">◆</span>
+
+    <!-- ── Set 2 (duplicate — required for seamless loop) ── -->
+    <span style="white-space:nowrap;padding-left:3rem;padding-right:3rem;color:rgba(11,35,75,0.65);font-family:'Newsreader',serif;font-weight:300;font-style:italic;font-size:0.9375rem;">
+      For the one who loves God and still feels stuck.
+    </span>
+    <span style="color:#BF8B19;padding-left:0.25rem;padding-right:0.25rem;font-size:0.75rem;" aria-hidden="true">◆</span>
+
+    <span style="white-space:nowrap;padding-left:3rem;padding-right:3rem;color:rgba(11,35,75,0.65);font-family:'Newsreader',serif;font-weight:300;font-style:italic;font-size:0.9375rem;">
+      For the believer whose faith and everyday life do not yet feel connected.
+    </span>
+    <span style="color:#BF8B19;padding-left:0.25rem;padding-right:0.25rem;font-size:0.75rem;" aria-hidden="true">◆</span>
+
+    <span style="white-space:nowrap;padding-left:3rem;padding-right:3rem;color:rgba(11,35,75,0.65);font-family:'Newsreader',serif;font-weight:300;font-style:italic;font-size:0.9375rem;">
+      For the one who keeps starting over and is ready for something to finally take root.
+    </span>
+    <span style="color:#BF8B19;padding-left:0.25rem;padding-right:0.25rem;font-size:0.75rem;" aria-hidden="true">◆</span>
+
+  </div>
+</div>
+```
+
+> **Why duplicate the content?** The marquee works by translating the strip exactly −50% of its total width, then resetting to 0 and looping. With two identical sets of statements, the reset is invisible — the end of set 2 looks exactly like the start of set 1.
+
+---
+
+## Typography Details
+
+| Property | Value |
+|---|---|
+| Font family | Newsreader |
+| Font weight | Light (300) |
+| Font style | Italic |
+| Font size | `0.9375rem` — **15px** |
+| Text colour | `rgba(11, 35, 75, 0.65)` — Navy at 65% opacity |
+| Separator | `◆` gold diamond at `0.75rem` / `12px` |
+| Separator colour | `#BF8B19` — Yellow Gold |
+
+---
+
+## Animation Details
+
+| Property | Value |
+|---|---|
+| Direction | Right → Left |
+| Duration | `40s` |
+| Timing | Linear (constant speed, no easing) |
+| Loop | Infinite |
+| Hover behaviour | Pauses on mouse-over |
+| Technique | CSS `@keyframes` on the inner flex container |
+
+---
+
+## Section Visual Details
+
+| Property | Value |
+|---|---|
+| Border | `1px solid rgba(11, 35, 75, 0.10)` — top and bottom |
+| Background | `rgba(237, 236, 233, 0.85)` — Stone at 85% opacity |
+| Texture | Rocks & River image at `5.5%` opacity (absolute, fills wrapper) |
+| Padding | `20px` top and bottom |
+| Overflow | Hidden (cuts off text as it exits either edge) |
+
+---
+
+## Quick Reference — Global CSS Block
+
+Add this once to **Global Styles → Custom CSS** (not per-element):
+
+```css
+/* ── Section 02 — Trust Bar Marquee ──── */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+.marquee-inner {
+  display: flex;
+  align-items: center;
+  width: max-content;
+  animation: marquee 40s linear infinite;
+}
+
+.marquee-inner:hover {
+  animation-play-state: paused;
+}
+```
+
+And add this once to **Global Styles → Custom CSS** for the outer wrapper (or use a CSS class via Breakdance's CSS Classes field):
+
+```css
+/* ── Trust Bar Wrapper ──────────────── */
+.trust-bar {
+  position: relative;
+  overflow: hidden;
+  border-top: 1px solid rgba(11, 35, 75, 0.10);
+  border-bottom: 1px solid rgba(11, 35, 75, 0.10);
+}
+
+.trust-bar-texture {
+  position: absolute;
+  inset: 0;
+  background-image: url('PASTE_YOUR_ROCKS_AND_RIVER_IMAGE_URL_HERE');
+  background-size: cover;
+  background-position: center;
+  opacity: 0.055;
+  pointer-events: none;
+}
+```
+
+| Step | Element | Class to assign |
+|---|---|---|
+| 1 | Outer Wrapper Div | `trust-bar` |
+| 2 | Texture Div | `trust-bar-texture` |
+| 3 | Code Block | *(no class needed — markup is self-contained)* |
