@@ -973,59 +973,69 @@ A full-width band that sits immediately below the Hero, separated by a subtle to
 
 ## How This Approach Works on Free
 
-Breakdance free does not allow Global Styles → Custom CSS, per-element Custom CSS, or the CSS Classes field — all of those require Pro. This build uses **none of them**. Instead:
+Breakdance free locks all CSS customisation behind Pro. The Code Snippets plugin's free tier allows HTML snippets only — no JavaScript, no CSS files. This build works within those constraints by:
 
-- All styling is done with **inline `style=""` attributes** directly inside the HTML
-- The scrolling animation is driven by a small **JavaScript snippet** embedded in the same block
-- The entire trust bar lives in a single **Code** element, which outputs raw HTML exactly as written
-
-No CSS classes. No custom CSS of any kind. One element, fully self-contained.
+- Embedding a `<style>` block **inside the HTML snippet itself** — Code Snippets outputs raw HTML, so the style block reaches the browser unmodified. WordPress's content sanitiser does not touch it.
+- Using **element IDs** inside that style block instead of classes — no Breakdance CSS Classes field needed anywhere.
+- All typography and colour is done with **inline `style=""` attributes** on each span.
+- The animation is pure CSS `@keyframes` — no JavaScript at all.
 
 ---
 
 ## Element Structure Overview
 
 ```
-1. Code element  ←  entire trust bar (inline styles + inline JS, no CSS classes)
+Code Snippets HTML snippet  ←  <style> block + full trust bar markup
+     ↓ outputs shortcode
+Breakdance Shortcode element  ←  paste the shortcode here
 ```
 
-One element. Nothing else needed.
+---
+
+## Step 1 — Create the HTML Snippet in Code Snippets
+
+1. Go to **WordPress → Code Snippets → Add New**
+2. Give it a name: `Trust Bar — Section 02`
+3. Set the type to **HTML**
+4. In the code field, paste the full block from Step 2 below
+5. Click **Save Changes and Activate**
+6. Copy the shortcode Code Snippets gives you (it will look like `[snippet id="X"]`)
 
 ---
 
-## Which Breakdance Element to Use
-
-In the Breakdance canvas, look for the element called **Code** (sometimes labelled **HTML** or **Embed** depending on your version). It is in the free element library. This element outputs its content as raw HTML without WordPress sanitising it — meaning `<div>`, `<script>`, and inline styles all survive exactly as written.
-
-Do **not** use Rich Text for this — WordPress's content editor strips `<div>` tags and `<script>` tags from Rich Text content.
-
----
-
-## Step 1 — Add the Code Element
-
-1. Open your page in the Breakdance canvas
-2. Click **+** directly after your Hero Section
-3. Search for **Code** (or **HTML** / **Embed**) and add it
-4. In the element's content field, delete any placeholder text
-5. Paste the full block below
-
----
-
-## Step 2 — Paste the Complete Markup
+## Step 2 — The HTML Snippet Code
 
 Replace `PASTE_YOUR_ROCKS_AND_RIVER_IMAGE_URL_HERE` with the WordPress media URL for **Rocks & River** after uploading it. Keep the single quotes around the URL exactly as shown.
 
 ```html
+<style>
+  @keyframes kpp-marquee {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  #kpp-tb-track {
+    display: flex;
+    align-items: center;
+    width: max-content;
+    animation: kpp-marquee 40s linear infinite;
+  }
+
+  #kpp-tb-strip:hover #kpp-tb-track {
+    animation-play-state: paused;
+  }
+</style>
+
 <div id="kpp-tb" style="position:relative;overflow:hidden;border-top:1px solid rgba(11,35,75,0.10);border-bottom:1px solid rgba(11,35,75,0.10);">
 
   <!-- Photographic texture at low opacity -->
   <div style="position:absolute;top:0;right:0;bottom:0;left:0;background-image:url('PASTE_YOUR_ROCKS_AND_RIVER_IMAGE_URL_HERE');background-size:cover;background-position:center;opacity:0.055;pointer-events:none;"></div>
 
   <!-- Parchment strip -->
-  <div style="position:relative;overflow:hidden;background-color:rgba(237,236,233,0.85);padding:1.25rem 0;">
+  <div id="kpp-tb-strip" style="position:relative;overflow:hidden;background-color:rgba(237,236,233,0.85);padding:1.25rem 0;">
 
-    <!-- Scrolling track — JS targets this by ID -->
-    <div id="kpp-tb-track" style="display:flex;align-items:center;width:max-content;will-change:transform;">
+    <!-- Scrolling track -->
+    <div id="kpp-tb-track" aria-label="Trust statements">
 
       <!-- ── Set 1 ───────────────────────────────── -->
       <span style="white-space:nowrap;padding:0 3rem;color:rgba(11,35,75,0.65);font-family:'Newsreader',serif;font-weight:300;font-style:italic;font-size:0.9375rem;">For the one who loves God and still feels stuck.</span>
@@ -1050,36 +1060,22 @@ Replace `PASTE_YOUR_ROCKS_AND_RIVER_IMAGE_URL_HERE` with the WordPress media URL
     </div>
   </div>
 </div>
-
-<script>
-(function () {
-  var track = document.getElementById('kpp-tb-track');
-  if (!track) return;
-  var pos = 0;
-  var speed = 0.6;
-  var paused = false;
-
-  function step() {
-    if (!paused) {
-      pos -= speed;
-      if (pos <= -(track.scrollWidth / 2)) pos = 0;
-      track.style.transform = 'translateX(' + pos + 'px)';
-    }
-    requestAnimationFrame(step);
-  }
-
-  var strip = track.parentElement;
-  strip.addEventListener('mouseenter', function () { paused = true; });
-  strip.addEventListener('mouseleave', function () { paused = false; });
-
-  requestAnimationFrame(step);
-})();
-</script>
 ```
 
-> **Why two sets of statements?** The JS resets position to `0` when the track has scrolled exactly half its total width. With two identical sets, the reset is invisible — the content repeats seamlessly.
+> **Why two sets of statements?** The CSS animation translates the track exactly −50% of its total width, then loops. With two identical sets, the reset point looks identical to the start — the loop is invisible.
 
-> **Speed adjustment:** The `speed` variable (currently `0.6`) controls pixels moved per animation frame. Increase it to scroll faster, decrease for slower. A value between `0.4` and `1.0` covers most needs.
+> **Why a `<style>` tag inside the snippet?** Code Snippets outputs its HTML snippet as raw markup — it bypasses WordPress's content sanitiser. The browser receives the `<style>` block and applies it normally. The IDs (`kpp-tb-track`, `kpp-tb-strip`) are unique enough that they will not conflict with anything else on the page.
+
+---
+
+## Step 3 — Embed in Breakdance
+
+1. In the Breakdance canvas, click **+** directly after your Hero Section
+2. Search for and add a **Shortcode** element
+3. In its content field, paste the shortcode Code Snippets gave you — e.g. `[snippet id="5"]`
+4. Save and preview
+
+The Shortcode element is available on the free plan and renders the snippet output exactly as written.
 
 ---
 
@@ -1102,10 +1098,11 @@ Replace `PASTE_YOUR_ROCKS_AND_RIVER_IMAGE_URL_HERE` with the WordPress media URL
 | Property | Value |
 |---|---|
 | Direction | Right → Left |
-| Speed | `0.6px` per animation frame (~60fps = ~36px/s) |
+| Duration | `40s` |
+| Timing | Linear (constant speed, no easing) |
 | Loop | Infinite |
-| Hover behaviour | Pauses on mouse-over (JS `paused` flag) |
-| Technique | `requestAnimationFrame` loop — no CSS animations, no keyframes |
+| Hover behaviour | Pauses on mouse-over — CSS `animation-play-state: paused` |
+| Technique | CSS `@keyframes` in an inline `<style>` block, targeting IDs |
 
 ---
 
