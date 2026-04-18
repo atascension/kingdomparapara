@@ -4,61 +4,69 @@
 ---
 
 # Navigation Bar
-*Built in Breakdance → Templates → Header Template*
+*Built in Breakdance → Templates → Add Custom Template*
 
 ---
 
 ## How the Nav Works
 
-The navbar is a **floating pill** fixed to the top of every page. It starts hidden and slides down once the user scrolls past the hero. On mobile, a hamburger button opens a full-screen overlay with large serif links.
+The navbar is a **floating pill** fixed to the top of every page. On mobile, a hamburger button opens a full-screen overlay with large serif links.
 
 The nav is built in three places:
 
 | Where | What goes there |
 |---|---|
-| **Breakdance → Templates → Header** | All nav elements — logo, links, CTA, hamburger button |
-| **Global Styles → Custom CSS** | All nav CSS |
-| **Footer Code** | The mobile overlay HTML + toggle JavaScript only |
+| **Breakdance → Templates → Add Custom Template** | All nav elements — logo, links, CTA, hamburger button |
+| **Breakdance → Global Styles → Custom CSS** | All nav CSS classes |
+| **Breakdance → Settings → Footer Code** | Mobile overlay HTML + JavaScript only |
 
-> The mobile overlay (`position: fixed; inset: 0`) needs to sit outside the header template because it covers the full page. The Footer Code field is the right place for it — the overlay HTML and its script are self-contained and don't affect the header structure.
+> The mobile overlay needs to be in Footer Code because it covers the full page (`position: fixed; inset: 0`) and can't live inside the nav template itself.
+
+---
+
+## How CSS Classes Work in Breakdance
+
+Every CSS rule in this guide uses a class selector (e.g. `.kpp-pill`, `.kpp-link`). Here is how you connect a class to an element:
+
+1. Select the element in the Breakdance canvas
+2. In the settings panel on the left, click the **Advanced** tab
+3. Find the **CSS Classes** field
+4. Type the class name **without the dot** — e.g. type `kpp-pill`, not `.kpp-pill`
+5. Press Enter or click away to apply
+
+Breakdance adds that class to the element's HTML. The browser then matches it to the CSS rule you pasted in Global Styles. Every step below tells you exactly which class to assign to each element.
 
 ---
 
 ## Element Structure Overview
 
 ```
-Header Template
-└── Section  ←  transparent wrapper (flex, centered)
-    └── Div  ←  pill container (navy, blur, flex, rounded-full)
+Custom Template
+└── Section  ←  transparent wrapper (flex, centered, position fixed)
+    └── Div  ←  pill container     [class: kpp-pill]
         ├── Image  ←  logo (linked to homepage)
-        ├── Div  ←  desktop links wrapper (hidden on mobile)
-        │   ├── Link  ←  "About"
-        │   ├── Link  ←  "Pathways"
-        │   ├── Link  ←  "Devotional"
-        │   └── Link  ←  "Storehouse"
-        ├── Button  ←  "Begin Here" CTA (hidden on mobile)
-        └── Button  ←  hamburger (visible mobile only)
+        ├── Div  ←  desktop links wrapper     [class: kpp-links]
+        │   ├── Link  ←  "About"              [class: kpp-link]
+        │   ├── Link  ←  "Pathways"           [class: kpp-link]
+        │   ├── Link  ←  "Devotional"         [class: kpp-link]
+        │   └── Link  ←  "Storehouse"         [class: kpp-link]
+        ├── Button  ←  "Begin Here" CTA        [class: kpp-cta]
+        └── Button  ←  hamburger               [class: kpp-ham]
+            └── Div  ←  icon lines             [class: kpp-ham-icon]
 ```
 
 ---
 
-## Before You Build — Create the Header Template
+## Step 0 — Create the Custom Template
 
 1. Go to **Breakdance → Templates**
-2. Click **Add New**
+2. Click **Add Template** → select **Add Custom Template**
 3. Name it `Main Navigation`
-4. Set **Template Type** to **Header**
-5. Click **Edit with Breakdance**
-6. In the template settings, set:
-   - **Position:** Fixed
-   - **Sticky:** Off *(fixed handles this)*
-   - **Background:** None / Transparent
-7. Save the template
+4. Click **Edit with Breakdance** to open the canvas
 
-Then assign it globally:
-1. Go to **Breakdance → Settings → Global**
-2. Under **Global Header**, select `Main Navigation`
-3. Save
+Once inside the canvas, look for **Display Conditions** or **Settings** in the top bar and set it to display on **Entire Site** (or **All Pages**) so it appears on every page.
+
+> Because the Section inside this template will be `position: fixed`, it will float above all page content regardless of where Breakdance injects the template markup. The display condition just ensures it loads on every page.
 
 ---
 
@@ -228,12 +236,14 @@ Go to **Breakdance → Global Styles → Custom CSS** and paste this block. It m
 
 ## Step 1 — Section (Outer Wrapper)
 
-Breakdance creates a Section automatically when you open the Header Template. Select it and configure:
+Breakdance creates a Section automatically when you open the canvas. Select it and configure:
 
 | Tab | Setting | Value |
 |---|---|---|
 | Background | Color | None / Transparent |
 | Spacing | Padding | `20px` top · `16px` left & right · `0` bottom |
+
+**Advanced tab → CSS Classes field:** leave blank — this element uses Custom CSS only.
 
 **Custom CSS:**
 
@@ -250,13 +260,17 @@ Breakdance creates a Section automatically when you open the Header Template. Se
 }
 ```
 
+> `position: fixed` is what makes the nav float above the page. Everything else positions it correctly at the top.
+
 ---
 
 ## Step 2 — Div (Pill Container)
 
-Inside the Section, add a **Div**. Assign it the CSS class `kpp-pill` using Breakdance's **CSS Classes** field.
+Inside the Section, add a **Div**.
 
-No additional Custom CSS needed — the `.kpp-pill` class from Global Styles handles everything.
+**Advanced tab → CSS Classes field:** type `kpp-pill`
+
+The `.kpp-pill` rule in Global Styles applies the navy background, blur, rounded corners, border, and shadow. No Custom CSS needed on this element.
 
 ---
 
@@ -270,6 +284,8 @@ Inside the pill Div, add an **Image** element.
 | Content | Link URL | `/` |
 | Content | Link Target | Same tab |
 | Content | Alt Text | `Kingdom Para Para` |
+
+**Advanced tab → CSS Classes field:** leave blank — use Custom CSS below instead.
 
 **Custom CSS:**
 
@@ -286,48 +302,59 @@ Inside the pill Div, add an **Image** element.
 
 ## Step 4 — Div (Desktop Links Wrapper)
 
-Inside the pill Div, after the Image, add a **Div**. Assign CSS class `kpp-links`.
+Inside the pill Div, after the Image, add a **Div**.
 
-No additional Custom CSS needed.
+**Advanced tab → CSS Classes field:** type `kpp-links`
+
+The `.kpp-links` rule hides this on mobile and shows it as a flex row on desktop. No Custom CSS needed.
 
 ---
 
 ## Steps 5–8 — Link Elements (Desktop Nav Links)
 
-Inside the Desktop Links Div, add four **Link** elements. Assign CSS class `kpp-link` to each.
+Inside the Desktop Links Div (Step 4), add four **Link** elements — one per nav item.
 
-| Step | Link text | Link target |
+For **each** Link element:
+- **Content tab → Text:** set the link label
+- **Content tab → Link / URL:** set the anchor target
+- **Advanced tab → CSS Classes field:** type `kpp-link`
+
+| Step | Label | URL |
 |---|---|---|
 | 5 | `About` | `#about` |
 | 6 | `Pathways` | `#pathways` |
 | 7 | `Devotional` | `#devotional` |
 | 8 | `Storehouse` | `#storehouse` |
 
-No additional Custom CSS needed — `.kpp-link` in Global Styles handles all styling.
+The `.kpp-link` rule in Global Styles handles all typography and hover colour. No Custom CSS needed on any of these.
 
 ---
 
 ## Step 9 — Button (CTA)
 
-Inside the pill Div, after the Links Div, add a **Button**. Assign CSS class `kpp-cta`.
+Inside the pill Div, after the Links Div (Step 4), add a **Button**.
 
 | Tab | Setting | Value |
 |---|---|---|
 | Content | Label | `Begin Here` |
 | Content | Link | `#pathways` |
 
-Remove any default Breakdance button styles — the `.kpp-cta` class overrides everything with `!important`.
+**Advanced tab → CSS Classes field:** type `kpp-cta`
+
+The `.kpp-cta` rule uses `!important` on every property to override Breakdance's default button styles. You do not need to change any typography or colour settings in the panel — the Global CSS handles everything.
 
 ---
 
 ## Step 10 — Button (Hamburger, mobile only)
 
-Inside the pill Div, as the last element, add another **Button**. Assign CSS class `kpp-ham`.
+Inside the pill Div, as the last element, add another **Button**.
 
 | Tab | Setting | Value |
 |---|---|---|
-| Content | Label | *(leave empty)* |
+| Content | Label | *(leave empty — no text)* |
 | Accessibility | ARIA Label | `Toggle navigation` |
+
+**Advanced tab → CSS Classes field:** type `kpp-ham`
 
 **Custom CSS:**
 
@@ -337,13 +364,17 @@ Inside the pill Div, as the last element, add another **Button**. Assign CSS cla
 }
 ```
 
-Then inside this Button, add a **Div** and assign it CSS class `kpp-ham-icon`. Leave it empty — the three hamburger lines are drawn using `::before`, `::after`, and the element itself via the Global CSS you already added.
+**Then add a Div inside this Button:**
+- Leave the Div empty — no content
+- **Advanced tab → CSS Classes field:** type `kpp-ham-icon`
+
+The `.kpp-ham-icon` rule in Global Styles draws three white lines using the element itself plus `::before` and `::after` pseudo-elements. No additional settings needed.
 
 ---
 
 ## Mobile Overlay — Footer Code
 
-The full-screen mobile overlay sits outside the header template because it covers the entire page (`position: fixed; inset: 0`). Go to **Breakdance → Settings → Custom Code → Footer Code** and paste this:
+The full-screen mobile overlay cannot live inside the Custom Template because it needs to cover the entire page. Go to **Breakdance → Settings → Custom Code → Footer Code** and paste this block. The overlay HTML and JavaScript are self-contained — they connect to the hamburger button via the `.kpp-ham` class, which the browser finds automatically.
 
 ```html
 <div id="kpp-overlay" aria-hidden="true">
